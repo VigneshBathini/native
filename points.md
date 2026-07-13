@@ -40,8 +40,8 @@ Product lists
 Contacts
 Social media feeds
 
-style makes the list fill the available space.
-contentContainerStyle adds spacing around the items inside the list.
+style: makes the list fill the available space.
+contentContainerStyle: adds spacing around the items inside the list.
 
 
 1. View
@@ -216,6 +216,7 @@ Revise
 resizeMode ->  cover,contain,stretch,center,repeat
 borderRadius
 Width & Height required
+
 10. ScrollView
 
 Know
@@ -244,6 +245,70 @@ style = styles the list itself (the outer box).
 contentContainerStyle = styles what is inside the list (the scrollable content containing the items).
 ---------------------------
 
+Q: What is ActivityIndicator?
+
+A built-in React Native component used to display a loading spinner while an operation is in progress.
+
+Q: When do you use it?
+
+During API calls, authentication, file uploads/downloads, and other asynchronous operations.
+----------------------------
+
+A Modal is a component that displays content on top of the current screen, blocking interaction with the background until it is closed.
+
+
+
+<Modal
+  visible={visible}          // Show / Hide Modal
+  animationType="slide"      // none | slide | fade
+  transparent={true}         // Transparent background
+  onRequestClose={() => {}}  // Android back button
+/>
+
+How do you open or close a Modal?
+
+By changing the visible prop (usually using state).
+
+Q: Why is onRequestClose important?
+
+On Android, it handles the Back button press and lets you close the modal gracefully.
+
+----------------------------
+A Switch is a toggle component that lets users turn a setting ON or OFF.
+
+value → Controls whether the switch is ON or OFF.
+onValueChange → Called when the user toggles the switch.  
+
+<Switch
+  value={enabled}               // Current state
+  onValueChange={setEnabled}    // Toggle state
+  disabled={false}              // Enable/Disable switch
+  trackColor={{ false: "#767577", true: "#81b0ff" }}
+  thumbColor="#f4f3f4"
+/>
+
+--------------------------------
+KeyboardAvoidingView automatically adjusts the layout when the keyboard appears so that input fields are not hidden.
+<KeyboardAvoidingView
+  behavior={Platform.OS === "ios" ? "padding" : "height"}
+  style={{ flex: 1 }}
+>
+  <TextInput placeholder="Enter Name" />
+</KeyboardAvoidingView>
+
+StatusBar controls the appearance of the device's status bar (time, battery, network, etc.).
+import { StatusBar } from "react-native";
+
+<StatusBar
+  barStyle="light-content"
+  backgroundColor="#007AFF"
+/>
+Which prop changes the text/icons in the status bar?
+
+barStyle
+-----------------------------------
+
+
 UseEffect: Effects always run after React updates the UI.
 
 What is a "Side Effect"?
@@ -267,7 +332,7 @@ Another State Update ✅
 Another Render ✅
 2. Empty Dependency Array ⭐⭐⭐⭐⭐
 useEffect(() => {
-  console.log("Runs only once");
+  console.log("Runs only once but if timeinterval present that will run");
 }, []);
 
 Runs only when the component mounts.
@@ -363,10 +428,10 @@ Does changing ref.current cause a re-render?
 No.
 
 Difference between useState and useRef?
-useState	useRef
-Triggers re-render	No re-render
-Used for UI state	Used for mutable values
-React tracks changes	React does not track .current
+useState	                  useRef
+Triggers re-render	   |    No re-render
+Used for UI state	     |    Used for mutable values
+React tracks changes	 |    React does not track .current
 📝 Revision Notes
 useRef returns { current: value }.
 The ref object persists for the lifetime of the component.
@@ -412,11 +477,11 @@ It only prevents expensive calculations from running unnecessarily.
 The component still re-renders.
 
 Difference between useMemo and useRef
-useMemo	useRef
-Caches computed values	Stores mutable values
-Recomputes when dependencies change	Never recomputes automatically
-Used for performance optimization	Used for references and mutable state
-Returns the computed value	Returns { current }
+useMemo	                              useRef
+Caches computed values	              Stores mutable values
+Recomputes when dependencies change 	Never recomputes automatically
+Used for performance optimization	    Used for references and mutable state
+Returns the computed value	          Returns { current }
 Revision Notes
 useMemo caches the result of a calculation.
 It recalculates only when dependencies change.
@@ -584,3 +649,34 @@ Prop drilling:
 Definition
 
 Prop Drilling is the process of passing data through multiple intermediate components, even when those components don't use the data themselves.
+
+
+What is useContext?
+
+useContext is a React Hook that allows a component to read data from a Context without passing props through every intermediate component.
+
+
+Why?
+Avoid prop drilling.
+Share common/global data across multiple components.
+Makes component communication cleaner and easier to maintain.
+
+eg:
+// Create Context
+const UserContext = createContext();
+
+// Provide Value
+<UserContext.Provider value="Vignesh">
+  <User />
+</UserContext.Provider>
+
+// Consume Value
+const user = useContext(UserContext);
+
+What problem does useContext solve?
+
+It solves prop drilling by allowing components to access shared data directly without passing props through intermediate components.
+
+What happens if there is no Provider?
+
+useContext() returns the default value passed to createContext() (or undefined if no default was provided).
