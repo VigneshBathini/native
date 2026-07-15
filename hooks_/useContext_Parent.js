@@ -1,3 +1,8 @@
+// What is useContext?
+
+// useContext is a React Hook that allows a 
+// component to read data from a Context without passing props through every intermediate component.
+
 import {createContext} from "react";
 import {View} from "react-native"
 import User from "./useContext_childuser"

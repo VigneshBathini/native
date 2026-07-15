@@ -680,3 +680,471 @@ It solves prop drilling by allowing components to access shared data directly wi
 What happens if there is no Provider?
 
 useContext() returns the default value passed to createContext() (or undefined if no default was provided).
+
+------------------------------------------
+What is fetch()?
+
+fetch() is a built-in JavaScript function used to make HTTP requests.
+
+fetch(url, options);
+
+It is not React Native-specific.
+
+It works in:
+
+React Native
+React
+Browsers
+Node.js (modern versions)
+
+GET Request
+const response = await fetch(
+  "https://jsonplaceholder.typicode.com/users"
+);
+
+const users = await response.json();
+
+console.log(users);
+Explain Every Line
+Line 1
+await fetch(...)
+
+Sends the HTTP request and waits for the response.
+
+Line 2
+response
+
+Contains:
+
+Status
+Headers
+Body
+Line 3
+await response.json()
+
+The server sends JSON as text.
+
+This converts it into a JavaScript object/array.
+
+Line 4
+console.log(users);
+
+Displays the parsed data.
+
+
+What does response.json() return?
+
+Answer:
+
+response.json() parses the JSON response body and converts it into a JavaScript object or array, depending on the JSON structure returned by the server.
+
+POST Request:
+
+await fetch("url",{
+  method:"POST",
+  headers:{
+    "Content-Type":"application/json",
+  }
+  body:JSON.stringify({
+    email:"abc@gmail.com"
+    password:"2234",
+  })
+}
+)
+
+Why JSON.stringify()?
+
+This is a common interview question.
+
+Your object is:
+
+{
+   email:"abc@gmail.com"
+}
+
+HTTP sends data as text.
+
+JSON.stringify() converts the JavaScript object into a JSON string.
+
+Without it, many APIs won't understand the request body.
+
+
+Why async/await?
+
+Without async/await:
+
+fetch(url)
+.then((response)=>response.json())
+.then((data)=>console.log(data))
+.catch((error)=>console.log(error))
+
+With async/await:
+
+try{
+  const response= await (url);
+  const data = await response.json()
+}catch(error){
+  console.log(error)
+}
+Much cleaner and easier to read.
+
+
+const getUsers = async()=>{
+  try{
+    const response = await fetch(url);
+
+    if(!reponse.ok){
+      throw new Error("API Error)
+    }
+
+    const data = await response.json();
+     setUserdata(data) 
+  }catch(error){
+    console.log(error)
+
+  }
+}
+
+Async await:
+await waits for a Promise.
+async makes a function automatically return a Promise
+
+response.ok	                     response.status
+Returns true or false	           Returns the HTTP status code (e.g., 200, 404,500)
+Checks if the request 
+was successful (status 200–299)	 Tells you the exact result from the server
+Good for simple success/failure  checks	Good when you need different logic       for                              different status codes
+
+
+What is a Promise?
+
+A Promise represents the future result of an asynchronous operation.
+
+const Promise = new Promise((resolve,rejected)=>{
+  const success= true;
+
+  if(success){
+    resolve("Success")
+  }
+  else{
+    reject("Failed)
+  }
+})
+
+
+Promise.all()
+
+This is one of the most useful Promise methods in React Native.
+
+Imagine your Home Screen needs:
+
+User Profile
+Notifications
+Products
+
+Without Promise.all():
+
+Get Profile
+
+↓
+
+Wait
+
+↓
+
+Get Notifications
+
+↓
+
+Wait
+
+↓
+
+Get Products
+
+Three requests run one after another.
+
+With Promise.all():
+
+Profile  ───────┐
+Notifications ──┼──► Run Together
+Products ───────┘
+
+All requests start at the same time.
+
+Example
+const [users, posts] = await Promise.all([
+  fetch("/users").then((res) => res.json()),
+  fetch("/posts").then((res) => res.json()),
+]);
+
+Both requests execute concurrently.
+
+After both finish:
+
+users
+posts
+
+are available.
+
+Internal Flow
+Request 1 ──────┐
+                │
+Request 2 ──────┼── Wait
+                │
+Request 3 ──────┘
+
+↓
+
+All Finished
+
+↓
+
+Continue Execution
+⚠️ Important Behavior
+
+If any one Promise fails, the whole Promise.all() rejects.
+
+Example:
+
+Users ✅
+
+Posts ❌
+
+Comments ✅
+
+Result:
+
+Promise.all()
+
+↓
+
+Rejected
+
+Even though two requests succeeded.
+
+
+Promise.allSettled()
+
+Suppose you want every result, even if some requests fail.
+
+const results = await Promise.allSettled([
+  fetch("/users"),
+  fetch("/posts"),
+  fetch("/comments"),
+]);
+
+Possible result:
+
+Users ✅
+
+Posts ❌
+
+Comments ✅
+
+Unlike Promise.all(), it doesn't fail immediately. Instead, it gives you the outcome of each Promise.
+
+This is useful when one failed request shouldn't prevent the rest of the screen from loading.
+
+
+
+What is a Promise?
+
+A Promise is an object representing the eventual completion or failure of an asynchronous operation.
+
+2. Why does fetch() return a Promise?
+
+Because network requests take time, and JavaScript shouldn't block the main thread while waiting.
+
+3. Difference between Promise.all() and Promise.allSettled()?
+Promise.all()	Promise.allSettled()
+Rejects if any Promise fails	Waits for every Promise
+Best when all requests are required	Best when requests are independent
+4. When would you use Promise.all() in React Native?
+
+Loading multiple independent APIs simultaneously, such as profile, notifications, and settings on a home screen.
+
+5. Why is async/await preferred over .then()?
+
+It makes asynchronous code easier to read, especially when there are multiple sequential operations. Under the hood, it still works with Promises.
+
+
+
+A Promise is a JavaScript object that represents the eventual result (success or failure) of an asynchronous operation.
+
+Examples:
+
+API Calls (fetch, Axios)
+File Uploads
+Database Queries
+Timers (setTimeout)
+
+
+
+Method	Success Condition	Failure Condition	Production Usage
+.then()	Runs on success	—	Handle successful response
+.catch()	—	Runs on failure	Handle errors
+.finally()	Always	Always	Hide loader, cleanup
+Promise.all()	All Promises succeed	Any Promise fails	Multiple API calls together
+Promise.allSettled()	Always returns all results	Never rejects because of one failure	Dashboard/widgets
+Promise.race()	First Promise settles	First rejection also wins	Timeout, fastest response
+Promise.any()	First successful Promise	Rejects only if all fail	Backup servers
+
+------------------------
+
+Definition
+
+Pull to Refresh lets users manually refresh the latest data by pulling down a list.
+
+🧠 Why?
+
+Keeps data updated without restarting the app.
+
+
+Which component provides Pull to Refresh?
+
+Answer:
+
+RefreshControl
+
+Q2. Which prop controls the spinner?
+
+Answer:
+
+refreshing
+
+Q3. Which callback is triggered?
+
+Answer:
+
+onRefresh
+
+
+-------------------------
+Pagination loads data in smaller chunks instead of fetching everything at once.
+
+Example
+<FlatList
+  data={users}
+  renderItem={renderItem}
+  onEndReached={loadMoreUsers}
+  onEndReachedThreshold={0.5}
+/>
+🔍 Explain Every Line
+onEndReached
+
+Called when the user reaches the end of the list.
+
+onEndReachedThreshold={0.5}
+
+Start loading before the user reaches the bottom.
+
+0.5 means approximately halfway through the remaining visible content.
+
+⚙️ Internal Flow
+Load First Page
+
+↓
+
+User Scrolls
+
+↓
+
+Near Bottom
+
+↓
+
+onEndReached()
+
+↓
+
+API Call
+
+↓
+
+Append New Data
+
+↓
+
+Continue Scrolling
+Production Example
+
+Suppose API returns
+
+Page 1
+
+20 Users
+
+Next request
+
+Page 2
+
+20 Users
+
+Instead of replacing data
+
+setUsers(newUsers);
+
+append it
+
+setUsers((prev) => [...prev, ...newUsers]);
+
+---------------------------------
+
+What are Props?
+
+Props (Properties) are used to pass data from a Parent Component to a Child Component.
+
+<CustomButton title="Login" />
+Component → CustomButton
+Prop → title
+Value → "Login"
+
+
+Parent (App.js)
+import { View } from "react-native";
+import CustomButton from "./components/CustomButton";
+
+export default function App() {
+  return (
+    <View>
+      <CustomButton title="Login" />
+    </View>
+  );
+}
+Child (CustomButton.js)
+import { Pressable, Text } from "react-native";
+
+export default function CustomButton(props) {
+  return (
+    <Pressable>
+      <Text>{props.title}</Text>
+    </Pressable>
+  );
+}
+
+Output:
+
+Login
+
+
+Definition
+
+children is a special prop that contains everything placed between a component's opening and closing tags.
+
+🧠 Why?
+
+Allows components to render dynamic UI instead of only fixed values.
+
+🛠 Syntax
+<Card>
+
+<Text>Hello</Text>
+
+</Card>
+
+Child:
+
+function Card({ children }) {
+  return <View>{children}</View>;
+}

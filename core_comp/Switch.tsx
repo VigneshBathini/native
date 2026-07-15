@@ -10,6 +10,8 @@ export default function App() {
         value={enabled}
         onValueChange={setEnabled}
       />
+
+      
     {/* 
       value → Controls whether the switch is ON or OFF.
       onValueChange → Called when the user toggles the switch. 
