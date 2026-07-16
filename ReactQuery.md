@@ -899,11 +899,11 @@ const {
   error,
   isSuccess
 } = useMutation(...)
-Property	Purpose
-mutate	Executes the mutation
-isPending	Mutation in progress
-error	Request failed
-isSuccess	Completed successfully
+Property    	Purpose
+mutate	      Executes the mutation
+isPending    	Mutation in progress
+error	        Request failed
+isSuccess   	Completed successfully
 
 
 Query Invalidation marks cached data as outdated and tells React Query to fetch fresh data.

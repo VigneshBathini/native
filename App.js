@@ -1,23 +1,16 @@
+//step2
 
-// step2 
-import { QueryClientProvider } from "@tanstack/react-query";
+import {Provider} from 'react-redux';
+import {store} from './redux/store';
+import HomesScreen from './redux/HomeScreen';
 
-import { queryClient } from "./react-query/QueryClient"; 
 
-import HomeScreen from "./react-query/Homescreen";
+export default function App(){
 
-export default function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <HomeScreen />
-    </QueryClientProvider>
-  );
+  return(
+    <Provider store={store}>
+      <HomesScreen />
+    </Provider>
+  )
+
 }
-
-
-// Usually in:
-// App.tsx
-// or
-// app/_layout.tsx   // Expo Router
-
-// step3 in api.js

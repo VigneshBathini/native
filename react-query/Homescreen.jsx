@@ -44,7 +44,7 @@ export default function HomeScreen() {
 
     });
 
-    // Fetch posts using React Query
+    // Fetch posts/items using React Query
     const {
         data,
         isLoading,

@@ -1,3 +1,5 @@
+//inddividual file for useMutation
+
 import {View,Text,Button} from 'react-native'
 import {useMutation,useQueryClient} from '@tanstack/react-query'
 import {createPost} from './api'

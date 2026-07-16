@@ -1,3 +1,5 @@
+//inddividual file for useQuery
+
 import { FlatList, Text, ActivityIndicator } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "./api";

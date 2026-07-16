@@ -1,4 +1,4 @@
-//Step2
+//Step3
 
 // Get All Posts
 export async function getPosts() {
@@ -44,3 +44,5 @@ export async function createPost(post) {
 
   return response.json();
 }
+
+//Step 5 in homescreen.jsx
