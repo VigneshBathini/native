@@ -7,6 +7,8 @@ import {
   decrement,
   addAmount
 } from "./countSlice";
+import { login } from "./authSlice";
+import { toggleTheme } from "./themeSlice";
 
 export default function HomeScreen() {
 
@@ -19,6 +21,14 @@ export default function HomeScreen() {
   // Read data from Redux Store
   const count = useSelector((state) => state.counter.count);
 
+  //access user
+  const user = useSelector(state=>state.auth.user)
+//token
+const token = useSelector(state=>state.auth.token)
+
+
+  //access theme
+  const mode = useSelector(state=>state.theme.mode) 
 
   return (
        <View style={styles.container}>
@@ -34,12 +44,28 @@ export default function HomeScreen() {
       />
 
       <Button
-        title="Add 10 amount"
+        title="Add 50 amount"
         onPress={() => dispatch(addAmount(50))}
+      />
+
+      <Button
+        title="Login"
+        onPress={()=> dispatch(login({
+          user:"Vignesh",
+          token:"28392dd"
+        }))} 
+      />
+      <Button
+        title = "toggle theme"
+        onPress={()=>dispatch(toggleTheme())}
       />
        <Text style={styles.text}>
         Count : {count}
       </Text>
+
+      <Text style={styles.text}>User: {user}</Text>
+       <Text style={styles.text}>Token:{token}</Text>
+        <Text style={styles.text}> mode: {mode}</Text>
     </View>
   );
 }

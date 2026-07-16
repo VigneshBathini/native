@@ -457,3 +457,46 @@ Store Updated
 ↓
 
 UI Updated
+
+--------------
+Multiple Slices
+
+Dividing Redux state into feature-based modules.
+
+authSlice
+
+Manages authentication-related state.
+
+themeSlice
+
+Manages application theme.
+
+counterSlice
+
+Manages counter state.
+
+Root Store
+
+Combines all slices into one Redux Store.
+
+--------------------------------------------
+
+createAsyncThunk
+
+Redux Toolkit utility for handling asynchronous operations like API calls.
+
+pending
+
+API request started.
+
+fulfilled
+
+API request completed successfully.
+
+rejected
+
+API request failed.
+
+extraReducers
+
+Handles actions that are created outside the slice (like async thunks).
