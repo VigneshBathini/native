@@ -500,3 +500,87 @@ API request failed.
 extraReducers
 
 Handles actions that are created outside the slice (like async thunks).
+
+------------------------
+Redux Persist
+
+Definition
+
+Redux Persist saves the Redux Store into device storage and restores it when the app starts again.
+
+Login
+
+↓
+
+Redux Store
+
+↓
+
+Redux Persist
+
+↓
+
+AsyncStorage
+
+↓
+
+Close App
+
+↓
+
+Open App
+
+↓
+
+Read AsyncStorage
+
+↓
+
+Restore Redux Store
+
+↓
+
+User Still Logged In
+
+Installation
+npm install redux-persist
+
+Expo already uses AsyncStorage separately, so install it too if you haven't:
+
+npx expo install @react-native-async-storage/async-storage
+
+
+What is PersistGate?
+
+Definition
+
+PersistGate delays rendering until persisted Redux data has been restored.
+
+What is Rehydration?
+
+This is the most important word.
+
+Definition
+
+Rehydration means restoring persisted Redux data back into the Redux Store when the app starts.
+
+Quick Definitions
+Redux Persist
+
+Library that saves Redux state into device storage and restores it after app restart.
+
+persistReducer()
+
+Wraps a reducer to make its state persistent.
+
+persistStore()
+
+Starts the persistence process.
+
+PersistGate
+
+Delays rendering until persisted state has been restored.
+
+Rehydration
+
+Restoring persisted state back into the Redux Store.
