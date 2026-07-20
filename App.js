@@ -1,26 +1,29 @@
-import { useEffect } from "react";
-import { Alert } from "react-native";
-import * as Linking from "expo-linking";
+import { View, Pressable, Text } from "react-native";
 
 export default function App() {
-
-  useEffect(() => {
-
-    const subscription =
-      Linking.addEventListener("url", (event) => {
-
-        console.log(event.url);
-
-        Alert.alert("Deep Link", event.url);
-
-      });
-
-    return () => {
-      subscription.remove();
-    };
-
-  }, []);
-
-  return null;
-
+  return (
+    <View
+      style={{
+        flex:1,
+        justifyContent:"center",
+        alignItems:"center"
+      }}
+    >
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Login Button"
+        accessibilityHint="Double tap to login"
+        onPress={() => {}}
+        style={{
+          backgroundColor:"#2196F3",
+          padding:15,
+          borderRadius:10
+        }}
+      >
+        <Text style={{color:"#fff"}}>
+          Login
+        </Text>
+      </Pressable>
+    </View>
+  );
 }
