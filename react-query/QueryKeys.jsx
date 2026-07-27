@@ -1,4 +1,4 @@
-//inddividual file for QueryKeys
+//individual file for QueryKeys
 
 import { useQuery } from "@tanstack/react-query";
 import { getPosts } from "./api";
