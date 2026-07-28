@@ -3,7 +3,7 @@
  
 import { QueryClientProvider } from "@tanstack/react-query";
 
-import { queryClient } from "./react-query/QueryClient"; 
+import { queryClient } from "./react-query/QueryClient"; //import step1
 
 import HomeScreen from "./react-query/Homescreen";
 
@@ -14,7 +14,6 @@ export default function App() {
     </QueryClientProvider>
   );
 }
-
 
 // Usually in:
 // App.tsx

@@ -8,6 +8,10 @@ import { useState } from "react";
 // 1. Variables
 // ============================================================================
 
+// Definition:
+// A variable is a container that stores a value.
+// In TypeScript, you can specify what type of value it can hold.
+
 // TypeScript usually infers the type, so explicit types are optional.
 
 const name = "Wills";          // string
@@ -24,6 +28,9 @@ const isActive: boolean = false;
 // ============================================================================
 // 2. Arrays
 // ============================================================================
+
+// Definition:
+// An array stores multiple values of the same type.
 
 // Array of numbers
 
@@ -52,12 +59,19 @@ users.push({
 // 3. Objects
 // ============================================================================
 
+// Definition:
+// An object stores related information as key-value pairs.
+
 // Inline object typing (avoid in large projects)
 
 const employee = {
   id: 1,
   name: "John",
 };
+
+// Properties:
+// id
+// name
 
 // Explicit object type
 
@@ -73,6 +87,10 @@ const customer: {
 // ============================================================================
 // 4. Type Alias
 // ============================================================================
+
+// Definition:
+// A type alias creates a custom type with your own name
+// so you can reuse it throughout your code.
 
 type Product = {
   id: number;
@@ -90,6 +108,9 @@ const product: Product = {
 // ============================================================================
 // 5. Interface
 // ============================================================================
+
+// Definition:
+// An interface describes the structure (shape) of an object.
 
 // Preferred for:
 // ✔ API Models
@@ -111,6 +132,8 @@ const customer1: Customer = {
 // Difference between Type & Interface
 // ============================================================================
 
+// Both define object shapes.
+
 // Use Interface
 // ✔ Objects
 // ✔ API Models
@@ -126,6 +149,9 @@ const customer1: Customer = {
 // ============================================================================
 // 6. Optional Properties (?)
 // ============================================================================
+
+// Definition:
+// An optional property may or may not exist in an object.
 
 interface Staff {
   id: number;
@@ -149,10 +175,13 @@ const staff2: Staff = {
 // 7. Functions
 // ============================================================================
 
+// Definition:
+// A function is a reusable block of code that performs a task.
+
 // JavaScript
 
 // function add(a, b) {
-//     return a + b;
+//   return a + b;
 // }
 
 // TypeScript
@@ -160,6 +189,13 @@ const staff2: Staff = {
 function add(a: number, b: number): number {
   return a + b;
 }
+
+// Parameters:
+// a
+// b
+
+// Return Type:
+// number
 
 // Arrow Function
 
@@ -171,6 +207,9 @@ const multiply = (a: number, b: number): number => {
 // ============================================================================
 // 8. Union Types
 // ============================================================================
+
+// Definition:
+// A union type allows a variable to have more than one type.
 
 // A variable can have multiple possible types.
 
@@ -190,9 +229,16 @@ interface Profile {
 // 9. any vs unknown
 // ============================================================================
 
+// Definition:
+// any disables TypeScript type checking.
+
 // Avoid
 
 let data: any;
+
+// Definition:
+// unknown means the type is not known yet,
+// so you must check it before using it.
 
 // Prefer
 
@@ -211,6 +257,10 @@ if (typeof response === "string") {
 // 10. Null + useState
 // ============================================================================
 
+// Definition:
+// null represents the intentional absence of a value.
+// It is commonly used as the initial value until data is available.
+
 // Object or null
 
 const [user, setUser] = useState<User | null>(null);
@@ -218,6 +268,16 @@ const [user, setUser] = useState<User | null>(null);
 // Array Example
 
 const [userList, setUserList] = useState<User[]>([]);
+
+// Generic Definition:
+// A generic is a placeholder for a type.
+// It lets you write reusable code while keeping type safety.
+
+// Breakdown:
+// useState -> React Hook
+// <User | null> -> Generic type argument
+// User | null -> Union type
+// null -> Initial value
 
 
 // ============================================================================
@@ -257,6 +317,10 @@ console.log(updatedEmployee);
 // Bonus - Function Returning Nothing
 // ============================================================================
 
+// Definition:
+// A return type specifies what a function returns.
+// void means a function does not return a value.
+
 function printName(name: string): void {
   console.log(name);
 }
@@ -265,6 +329,10 @@ function printName(name: string): void {
 // ============================================================================
 // Bonus - Callback Function
 // ============================================================================
+
+// Definition:
+// A callback function is a function passed as an argument
+// to another function.
 
 interface ButtonProps {
   title: string;
@@ -305,8 +373,8 @@ employee.salary += 5000;
 ✅ Good
 
 return {
-   ...employee,
-   salary: employee.salary + 5000,
+  ...employee,
+  salary: employee.salary + 5000,
 };
 
 8. Use optional properties (?) when needed.
