@@ -22,7 +22,6 @@ export default function Login(){
       <Text style={styles.heading}>Login Page</Text>
 
       <TextInput
-       
        placeholder="Enter email"
        value={email}
        onChangeText={setEmail}
@@ -34,7 +33,7 @@ export default function Login(){
       value={pwd}
       onChangeText={setPwd}
       secureTextEntry
-       style={styles.input}
+      style={styles.input}
       />
 
       <Pressable style={styles.submit} onPress={Submit} 

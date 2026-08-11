@@ -14,16 +14,17 @@ export default function app(){
         />
 
         <Modal 
-        visible={visible}
+        visible={visible} 
         animationType="slide" //Modal slides from the bottom.
         transparent={true} //Background remains visible behind the modal.
-        onRequestClose={() => setVisible(false)}
+        onRequestClose={() => setVisible(false)} //This function is called when the user attempts to close the modal, 
+        //for example by pressing the back button on Android.
         >
             <View>
                 <Text>Hi</Text>
             </View>
             <Button
-             onPress={()=>setVisible(false)}
+             onPress={()=>setVisible(false)} 
              title="Close"   
             />
         </Modal>
