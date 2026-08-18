@@ -117,21 +117,13 @@ Theme Slice
 Much easier to manage.
 
 
-Slice
+Slice: A module that contains related state and logic.
 
-A module that contains related state and logic.
+createSlice():Creates a Slice, Reducer, and Actions automatically.
 
-createSlice()
+initialState:Default state of the Slice.
 
-Creates a Slice, Reducer, and Actions automatically.
-
-initialState
-
-Default state of the Slice.
-
-reducers
-
-Functions that update the state.
+reducers:Functions that update the state.
 
 state
 state.count++;
@@ -459,13 +451,9 @@ Store Updated
 UI Updated
 
 --------------
-Multiple Slices
+Multiple Slices:Dividing Redux state into feature-based modules.
 
-Dividing Redux state into feature-based modules.
-
-authSlice
-
-Manages authentication-related state.
+authSlice:Manages authentication-related state.
 
 themeSlice
 
@@ -475,9 +463,7 @@ counterSlice
 
 Manages counter state.
 
-Root Store
-
-Combines all slices into one Redux Store.
+Root Store:Combines all slices into one Redux Store.
 
 --------------------------------------------
 

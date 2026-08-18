@@ -7,9 +7,7 @@ import HomesScreen from './redux/HomeScreen';
 import { PersistGate } from "redux-persist/integration/react";
 //PersistGate delays rendering until persisted Redux data has been restored.
 
-
 export default function App(){
-
   return(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -17,5 +15,4 @@ export default function App(){
       </PersistGate>
     </Provider>
   )
-
 }

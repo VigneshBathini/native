@@ -42,7 +42,7 @@ export const {
     increment,
     decrement,
     addAmount
-}=counterSlice.actions;
+}=counterSlice.actions; //for components
 
-// Export Reducer -The reducer function created by createSlice()
+// Export Reducer -The reducer function created by createSlice()-> use for store
 export default counterSlice.reducer;

@@ -258,8 +258,6 @@ During API calls, authentication, file uploads/downloads, and other asynchronous
 
 A Modal is a component that displays content on top of the current screen, blocking interaction with the background until it is closed.
 
-
-
 <Modal
   visible={visible}          // Show / Hide Modal
   animationType="slide"      // none | slide | fade
