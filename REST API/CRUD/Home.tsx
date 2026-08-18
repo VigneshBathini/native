@@ -166,8 +166,6 @@ export default function Home() {
                      <Text>{item.email}</Text>
                 </View>
              )}
-
-        
             />
         </View>
     );
