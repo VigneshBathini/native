@@ -33,7 +33,7 @@ export default function App() {
 
       <Button
         title="Increase"
-        onPress={() => setCount(count + 1)}
+        onPress={() => setCount(count + 1)} 
       />
     </View>
   );

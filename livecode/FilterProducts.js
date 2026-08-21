@@ -100,8 +100,8 @@ export default function ProductFilter(){
         <Text>Audio</Text>
         </Pressable>
         <Pressable onPress={() => setSelectedCategory("Laptop")}>
-  <Text>Laptop</Text>
-</Pressable>
+        <Text>Laptop</Text>
+        </Pressable>
       </View>
 
       <View>

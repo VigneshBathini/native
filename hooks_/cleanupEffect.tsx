@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
 //   setInterval(() => {
 //     console.log(count);
 //   }, 1000);
-// }, []);
+// }, []);]
 
 // Question:
 

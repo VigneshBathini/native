@@ -3,7 +3,6 @@ import { View, Button, Text } from "react-native";
 
 const Child = memo(({ user }) => {
   console.log("Child Rendered");
-
   return <Text>{user.name}</Text>;
 });
 

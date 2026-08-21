@@ -309,7 +309,7 @@ barStyle
 -----------------------------------
 
 
-UseEffect: Effects always run after React updates the UI.
+UseEffect: useEffect is a React Hook used to perform side effects in a component. Effects always run after React updates the UI. 
 
 What is a "Side Effect"?
 
@@ -322,14 +322,11 @@ useEffect(() => {
 });
 
 When does it run?
-
 Initial Render ✅
-
 State Update ✅
-
 Another State Update ✅
-
 Another Render ✅
+
 2. Empty Dependency Array ⭐⭐⭐⭐⭐
 useEffect(() => {
   console.log("Runs only once but if timeinterval present that will run");
@@ -337,7 +334,7 @@ useEffect(() => {
 
 Runs only when the component mounts.
 
-Think:
+Think: 
 
 Component opens
 
@@ -432,6 +429,7 @@ useState	                  useRef
 Triggers re-render	   |    No re-render
 Used for UI state	     |    Used for mutable values
 React tracks changes	 |    React does not track .current
+
 📝 Revision Notes
 useRef returns { current: value }.
 The ref object persists for the lifetime of the component.
@@ -439,9 +437,7 @@ Updating .current does not trigger a re-render.
 Great for timers, DOM/TextInput references, previous values, and solving stale closures.
 
 Why doesn't useRef trigger a re-render?
-
 A strong answer is:
-
 "useRef returns a mutable object. Updating its .current property does not notify React because React only schedules re-renders when state or props change. The ref object itself keeps the same identity; only one of its properties is mutated."
 
 
