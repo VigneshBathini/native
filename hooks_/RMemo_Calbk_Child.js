@@ -12,5 +12,4 @@ function Child({ onPress }) {
   );
 }
 
-// Re-render only if props change
 export default React.memo(Child);

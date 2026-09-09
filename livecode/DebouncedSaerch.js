@@ -1,3 +1,5 @@
+//Debouncing:It doesn't wait 500ms from when you first started typing. It waits 500ms from your LAST keystroke.
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -108,3 +110,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+
+
+// You type "J"
+// ↓
+// Timer starts → 500ms
+
+// You type "Jo" before 500ms
+// ↓
+// Cancel "J" timer
+// ↓
+// Start new 500ms timer
+
+// You type "Joh" before 500ms
+// ↓
+// Cancel "Jo" timer
+// ↓
+// Start new 500ms timer
+
+// You type "John"
+// ↓
+// Cancel "Joh" timer
+// ↓
+// Start new 500ms timer
+
+// You STOP typing
+// ↓
+// Wait 500ms
+// ↓
+// Update debouncedSearch = "John"

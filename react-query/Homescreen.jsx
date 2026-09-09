@@ -53,7 +53,7 @@ export default function HomeScreen() {
 
         // Unique Cache ID
         queryKey: ["posts"],
-
+        
         // Function to fetch data
         queryFn: getPosts,
 

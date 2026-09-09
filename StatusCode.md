@@ -1,3 +1,23 @@
+200 → Success
+
+201 → Created
+
+204 → Deleted
+
+400 → Bad Request
+
+401 → Unauthorized
+
+403 → Forbidden
+
+404 → Not Found
+
+500 → Server Error
+
+502 → Bad Gateway
+
+503 → Service Unavailable
+
 What is a Status Code?
 
 A Status Code is a 3-digit number sent by the server that indicates the result of an HTTP request.

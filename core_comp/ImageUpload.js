@@ -32,7 +32,7 @@ export default function App() {
       "http://192.168.1.15:5000/upload", // <-- Replace with your PC IP
       {
         method: "POST",
-        body: formData,
+        body: formData, //when we add with formdata ,fetch automatically sets the appropriate header
       }
     );
 

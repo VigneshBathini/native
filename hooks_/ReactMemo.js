@@ -28,7 +28,7 @@ export default function App() {
       }}
     >
       <Child name="Vignesh" />
-
+      
       <Text>{count}</Text>
 
       <Button

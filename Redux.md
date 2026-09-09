@@ -1,7 +1,6 @@
 Bottom-> top
 
 useSelector()
-
         ▲
         │
         │

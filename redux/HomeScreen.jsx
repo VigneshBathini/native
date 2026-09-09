@@ -23,8 +23,8 @@ export default function HomeScreen() {
 
   //access user
   const user = useSelector(state=>state.auth.user)
-//token
-const token = useSelector(state=>state.auth.token)
+  //token
+  const token = useSelector(state=>state.auth.token)
 
 
   //access theme

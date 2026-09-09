@@ -337,13 +337,9 @@ Runs only when the component mounts.
 Think: 
 
 Component opens
-
 ↓
-
 Run once
-
 ↓
-
 Never again
 
 This is commonly used for:
@@ -417,8 +413,7 @@ useRef is an important tool for solving some stale closure problems.
 What is useRef?
 
 A hook that returns a mutable object with a .current property whose value persists across renders.
-Changing ref.current immediately updates the value,
-but does not trigger a re-render.
+Changing ref.current immediately updates the value, but does not trigger a re-render.
 
 Does changing ref.current cause a re-render?
 
@@ -562,7 +557,7 @@ function logic
 -------------------------------
 
 // React.memo
-//React.memo performs a shallow comparison of props.
+// React.memo performs a shallow comparison of props.
 // Prevents child component re-render if props remain the same.
 
 
@@ -583,7 +578,7 @@ Answer:
 ❌ No, if you pass an inline function like onPress={() => {}}, because a new function is created on every render. In that case, combine React.memo with useCallback.
 
 React.memo optimizes component rendering.
-
+ 
 useCallback optimizes function references.
 
 Together they prevent unnecessary child re-renders.
@@ -592,29 +587,17 @@ Together they prevent unnecessary child re-renders.
 React Rendering Rules
 
 State changes
-
 ↓
-
 Component re-renders
-
 ↓
-
 Functions are recreated
-
 ↓
-
 Objects are recreated
-
 ↓
-
 Arrays are recreated
-
 ↓
-
 React compares props
-
 ↓
-
 React.memo decides whether to re-render child
 
 ----------------
@@ -1144,3 +1127,61 @@ Child:
 function Card({ children }) {
   return <View>{children}</View>;
 }
+
+-------------------------------------
+Debounce — most common example ⭐
+
+Search box / API search
+
+User types:
+J → Jo → Joh → John
+
+Wait until user stops typing
+        ↓
+      500ms
+        ↓
+Call API / perform search
+
+Used for:
+
+Search suggestions
+Product search
+User search
+Autocomplete
+
+Answer:
+
+Debouncing delays execution until the user stops triggering an event for a specified time. For example, in a search box, instead of calling the API for every keystroke, we wait 500ms after the user's last keystroke.
+
+Throttle — most common example ⭐
+
+Scroll event
+
+User keeps scrolling continuously
+
+Scroll → Execute
+Scroll → Ignore
+Scroll → Ignore
+Scroll → Ignore
+        ↓
+     1 second
+        ↓
+Scroll → Execute
+Scroll → Ignore
+Scroll → Ignore
+        ↓
+     1 second
+        ↓
+Scroll → Execute
+
+Used for:
+
+Scroll events
+Location updates
+Resize events
+Mouse/touch events
+Continuous sensor events
+
+Answer:
+
+Throttling limits how frequently a function can execute. For example, during continuous scrolling, instead of executing expensive logic on every scroll event, we allow it to execute once every 1 second.

@@ -640,6 +640,30 @@ console.log(binarySearch(arr22, 100));
 // -1
 
 
+//--------------
+let str= "leet**cod*e" 
+//op: lecoe
+
+//step1: for loop if * present then remove left character  as well with *
+
+let res= ""
+
+for(let i=0;i<str.length;i++)
+{
+    if(str[i]== '*' )
+    {
+        console.log(str[i])
+       
+        res = res.slice(0, -1)
+    } 
+    else  if(str[i]!= '*'){
+     
+         res = res+ str[i]
+    }
+}
+
+console.log("res",res)
+
 // ============================================================
 // BINARY SEARCH — HOW TO REMEMBER
 // ============================================================

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [count, setCount] = useState(0);
-const [name, setName] = useState("VIZ");
+  const [name, setName] = useState("VIZ");
 
   console.log("Component Rendered");
 
@@ -12,15 +12,14 @@ const [name, setName] = useState("VIZ");
     console.log("useEffect Ran");
   });
 
-    useEffect(() => {
+  useEffect(() => {
     console.log("useEffect empty dependency-> run only once at render");
-    
   },[]);
 
 
   useEffect(() => {
   console.log("useeffect dependency array-> run at state updates",count);
-}, [count]);
+  }, [count]);
 
   return (
     <View style={styles.container}>

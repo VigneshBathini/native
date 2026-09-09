@@ -29,8 +29,6 @@ export default function app(){
             />
         </Modal>
 
-
-
         </View>
     )
 }
