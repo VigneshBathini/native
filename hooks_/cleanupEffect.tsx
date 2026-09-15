@@ -6,12 +6,10 @@ export default function App() {
 
   useEffect(() => {
     console.log("Effect Started",count);
-
     return () => {
       console.log("Cleanup Called",count);
     };
   },[count]);
-
 
 //useeffect with return   
 // with dependency array
