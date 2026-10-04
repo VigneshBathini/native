@@ -21,6 +21,6 @@ export default function QueryKeys() {
       return res.json();
     },
   });
-
+  
   return null;
 }

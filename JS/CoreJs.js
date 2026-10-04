@@ -1,3 +1,104 @@
+// CORE JAVASCRIPT – QUICK REVISION
+
+// Variables
+// • var → function scoped, redeclare/reassign
+// • let → block scoped, reassign
+// • const → block scoped, no reassignment
+// • let/const → TDZ
+
+// Hoisting
+// • var → undefined
+// • let/const → TDZ
+
+// Equality
+// • == → type conversion
+// • === → value + type
+
+// References
+// • Primitive → copied by value
+// • Object/Array → reference
+// • {...obj} → shallow copy
+// • structuredClone() → deep copy
+
+// Array Methods
+// • map → transform
+// • filter → select
+// • find → first matching item
+// • findIndex → position
+// • some → at least one
+// • every → all
+// • reduce → one result
+// • forEach → execute, returns undefined
+// • slice → non-mutating extract
+// • splice → mutates
+// • sort → mutates; (a,b)=>a-b for ascending
+// • reverse → mutates
+// • concat → combine
+// • includes → true/false
+// • indexOf → index / -1
+// • join → Array → String
+// • split → String → Array
+
+// Loops
+// • for...of → values
+// • for...in → keys/indexes
+
+// Objects
+// • Object.keys → keys
+// • Object.values → values
+// • Object.entries → key/value
+// • ?. → safe access
+// • ?? → default for null/undefined
+
+// Destructuring
+// • {name} → object property
+// • [a,b] → array values
+// • ...rest → remaining values
+
+// Spread
+// • ...obj → copy/merge
+// • later property wins
+
+// Functions
+// • Default parameter works for undefined, not null
+
+// Async
+// • Promise.then → microtask
+// • setTimeout → macrotask
+// • async/await → Promise-based
+
+// React
+// • Avoid direct state mutation
+// • Create new array/object using spread
+
+// 0.1 + 0.2 === 0.3       → false
+
+// typeof null             → "object"
+
+// typeof []               → "object"
+
+// const object property   → can be changed
+
+// const array element     → can be changed
+
+// undefined default param → default is used
+
+// null default param      → default is NOT used
+
+// [1,2] === [1,2]         → false
+// {} === {}               → false
+
+// [] == false             → true   (type coercion)
+
+// NaN === NaN             → false
+
+// NaN                     → typeof "number"
+
+// "5" + 2                 → "52"
+
+// "5" - 2                 → 3
+
+
 /*
 ============================================================
           JAVASCRIPT INTERVIEW REVISION
@@ -860,6 +961,1444 @@ setTimeout()
 
 async/await
 -> Promise-based
+
+
+============================================================
+*/
+
+// ============================================================
+// APPENDIX - ADDITIONAL CORE JAVASCRIPT INTERVIEW TOPICS
+// ============================================================
+
+
+// ============================================================
+// 23. == vs ===
+// ============================================================
+
+/*
+==  -> Loose equality
+     -> Performs type conversion
+
+=== -> Strict equality
+     -> Checks value AND type
+*/
+
+
+console.log(5 == "5");
+// true
+
+console.log(5 === "5");
+// false
+
+
+/*
+INTERVIEW:
+
+Prefer === in most cases because
+it avoids unexpected type conversion.
+*/
+
+
+// ============================================================
+// 24. TYPEOF
+// ============================================================
+
+console.log(typeof 10);
+// "number"
+
+console.log(typeof "Hello");
+// "string"
+
+console.log(typeof true);
+// "boolean"
+
+console.log(typeof undefined);
+// "undefined"
+
+console.log(typeof null);
+// "object"  <-- JavaScript historical behavior
+
+console.log(typeof []);
+// "object"
+
+console.log(typeof {});
+// "object"
+
+console.log(typeof function () {});
+// "function"
+
+
+/*
+IMPORTANT:
+
+typeof null
+-> "object"
+
+typeof []
+-> "object"
+
+To check array:
+
+Array.isArray([])
+-> true
+*/
+
+
+console.log(Array.isArray([]));
+// true
+
+console.log(Array.isArray({}));
+// false
+
+
+// ============================================================
+// 25. PRIMITIVE COPY vs REFERENCE COPY
+// ============================================================
+
+
+// Primitive
+
+let primitiveA = 10;
+let primitiveB = primitiveA;
+
+primitiveB = 20;
+
+console.log(primitiveA);
+// 10
+
+console.log(primitiveB);
+// 20
+
+
+/*
+Primitive values are copied by value.
+*/
+
+
+// Object
+
+let objectA = {
+    value: 10
+};
+
+let objectB = objectA;
+
+objectB.value = 20;
+
+console.log(objectA.value);
+// 20
+
+console.log(objectB.value);
+// 20
+
+
+/*
+Objects are reference values.
+
+objectA and objectB point to
+the same object.
+*/
+
+
+// ============================================================
+// 26. ARRAY REFERENCE
+// ============================================================
+
+const arr1 = [1, 2, 3];
+
+const arr2 = arr1;
+
+arr2.push(4);
+
+console.log(arr1);
+// [1, 2, 3, 4]
+
+console.log(arr2);
+// [1, 2, 3, 4]
+
+
+/*
+Both variables refer to the same array.
+*/
+
+
+// ============================================================
+// 27. ARRAY COPY USING SPREAD
+// ============================================================
+
+const originalArray = [1, 2, 3];
+
+const copiedArray = [...originalArray];
+
+copiedArray.push(4);
+
+console.log(originalArray);
+// [1, 2, 3]
+
+console.log(copiedArray);
+// [1, 2, 3, 4]
+
+
+/*
+Spread creates a new outer array.
+
+But nested arrays/objects are still shared.
+*/
+
+
+// ============================================================
+// 28. NESTED ARRAY SHALLOW COPY
+// ============================================================
+
+const nestedArray = [
+    [1, 2],
+    [3, 4]
+];
+
+const copiedNested = [...nestedArray];
+
+copiedNested[0].push(5);
+
+console.log(nestedArray);
+// [[1, 2, 5], [3, 4]]
+
+console.log(copiedNested);
+// [[1, 2, 5], [3, 4]]
+
+
+/*
+Spread is a SHALLOW copy.
+
+Outer array -> new
+Inner arrays -> same references
+*/
+
+
+// ============================================================
+// 29. MAP() - IMPORTANT RETURN BEHAVIOR
+// ============================================================
+
+const mapNumbers = [1, 2, 3];
+
+const mapResult = mapNumbers.map(num => {
+
+    num * 2;
+
+});
+
+console.log(mapResult);
+
+// [undefined, undefined, undefined]
+
+
+/*
+Because the callback does not return anything.
+
+Correct:
+
+*/
+
+const correctMap = mapNumbers.map(num => {
+
+    return num * 2;
+
+});
+
+
+// Short form
+
+const correctMap2 = mapNumbers.map(
+    num => num * 2
+);
+
+
+// ============================================================
+// 30. FILTER() - IMPORTANT RETURN BEHAVIOR
+// ============================================================
+
+const filterNumbers = [1, 2, 3, 4];
+
+const filterResult = filterNumbers.filter(num => {
+
+    num > 2;
+
+});
+
+console.log(filterResult);
+
+// []
+
+
+/*
+No return
+-> undefined
+-> undefined is falsy
+-> nothing is selected
+*/
+
+
+const correctFilter = filterNumbers.filter(num => {
+
+    return num > 2;
+
+});
+
+
+// Short form
+
+const correctFilter2 = filterNumbers.filter(
+    num => num > 2
+);
+
+
+// ============================================================
+// 31. FILTER() + MAP()
+// ============================================================
+
+const values = [10, 15, 20, 25];
+
+const result = values
+    .filter(num => num >= 20)
+    .map(num => num * 2);
+
+console.log(result);
+
+// [40, 50]
+
+
+/*
+First:
+filter()
+
+Then:
+map()
+*/
+
+
+// ============================================================
+// 32. REDUCE() - SUM
+// ============================================================
+
+const sumNumbers = [1, 2, 3, 4];
+
+const sum = sumNumbers.reduce(
+    (total, num) => total + num,
+    0
+);
+
+console.log(sum);
+
+// 10
+
+
+// ============================================================
+// 33. REDUCE() - MULTIPLICATION
+// ============================================================
+
+const multiplyNumbers = [1, 2, 3];
+
+const multiplication = multiplyNumbers.reduce(
+    (result, num) => result * num,
+    1
+);
+
+console.log(multiplication);
+
+// 6
+
+
+/*
+IMPORTANT:
+
+reduce()
+can produce one final value.
+
+Examples:
+
+Sum
+Product
+Maximum
+Minimum
+Object grouping
+Counting
+*/
+
+
+// ============================================================
+// 34. FIND()
+// ============================================================
+
+const findNumbers = [10, 20, 30, 40];
+
+const firstMatch = findNumbers.find(
+    num => num > 20
+);
+
+console.log(firstMatch);
+
+// 30
+
+
+/*
+find()
+returns the actual matching element.
+
+It does NOT return true/false.
+*/
+
+
+// ============================================================
+// 35. FIND() WITH OBJECTS
+// ============================================================
+
+const employees = [
+
+    {
+        name: "Jack",
+        age: 22
+    },
+
+    {
+        name: "John",
+        age: 25
+    },
+
+    {
+        name: "Mike",
+        age: 30
+    }
+
+];
+
+
+const employee1 = employees.find(
+    user => user.age >= 25
+);
+
+console.log(employee1);
+
+/*
+{
+    name: "John",
+    age: 25
+}
+*/
+
+
+// ============================================================
+// 36. SOME() and EVERY()
+// ============================================================
+
+const nums = [2, 4, 6, 7];
+
+
+// some()
+// At least ONE element satisfies condition
+
+console.log(
+    nums.some(num => num % 2 !== 0)
+);
+
+// true
+
+
+// every()
+// ALL elements must satisfy condition
+
+console.log(
+    nums.every(num => num % 2 === 0)
+);
+
+// false
+
+
+/*
+MEMORY:
+
+some()
+-> at least one
+
+every()
+-> all
+*/
+
+
+// ============================================================
+// 37. INCLUDES()
+// ============================================================
+
+const fruits = [
+    "Apple",
+    "Banana",
+    "Mango"
+];
+
+console.log(
+    fruits.includes("Banana")
+);
+
+// true
+
+console.log(
+    fruits.includes("Orange")
+);
+
+// false
+
+
+/*
+includes()
+-> checks whether a value exists
+-> returns true / false
+*/
+
+
+// ============================================================
+// 38. INDEXOF()
+// ============================================================
+
+console.log(
+    fruits.indexOf("Banana")
+);
+
+// 1
+
+console.log(
+    fruits.indexOf("Orange")
+);
+
+// -1
+
+
+/*
+MEMORY:
+
+Found
+-> index
+
+Not found
+-> -1
+*/
+
+
+// ============================================================
+// 39. SLICE()
+// ============================================================
+
+const sliceNumbers = [1, 2, 3, 4, 5];
+
+const sliced = sliceNumbers.slice(1, 3);
+
+console.log(sliced);
+
+// [2, 3]
+
+console.log(sliceNumbers);
+
+// [1, 2, 3, 4, 5]
+
+
+/*
+slice():
+
+-> does NOT modify original array
+-> start index included
+-> end index excluded
+*/
+
+
+// ============================================================
+// 40. SPLICE()
+// ============================================================
+
+const spliceNumbers = [1, 2, 3, 4, 5];
+
+const removed = spliceNumbers.splice(1, 2);
+
+console.log(removed);
+
+// [2, 3]
+
+console.log(spliceNumbers);
+
+// [1, 4, 5]
+
+
+/*
+splice():
+
+-> modifies original array
+-> can add/remove/replace elements
+*/
+
+
+/*
+MEMORY:
+
+slice()
+-> copy/extract
+-> original unchanged
+
+splice()
+-> modify
+-> original changed
+*/
+
+
+// ============================================================
+// 41. SORT()
+// ============================================================
+
+const sortNumbers = [10, 2, 5, 1];
+
+sortNumbers.sort();
+
+console.log(sortNumbers);
+
+// [1, 10, 2, 5]
+
+
+/*
+WHY?
+
+Default sort converts values to strings
+and compares them lexicographically.
+*/
+
+
+// ============================================================
+// 42. NUMERIC SORT()
+// ============================================================
+
+const numericNumbers = [10, 2, 5, 1];
+
+numericNumbers.sort(
+    (a, b) => a - b
+);
+
+console.log(numericNumbers);
+
+// [1, 2, 5, 10]
+
+
+/*
+Ascending:
+
+a - b
+
+
+Descending:
+
+b - a
+*/
+
+
+numericNumbers.sort(
+    (a, b) => b - a
+);
+
+
+// ============================================================
+// 43. REVERSE()
+// ============================================================
+
+const reverseNumbers = [1, 2, 3, 4];
+
+const reversedNumbers = reverseNumbers.reverse();
+
+console.log(reversedNumbers);
+
+// [4, 3, 2, 1]
+
+console.log(reverseNumbers);
+
+// [4, 3, 2, 1]
+
+
+/*
+IMPORTANT:
+
+reverse()
+MODIFIES the original array.
+*/
+
+
+// ============================================================
+// 44. CONCAT()
+// ============================================================
+
+const firstArray = [1, 2];
+
+const secondArray = [3, 4];
+
+const combinedArray = firstArray.concat(
+    secondArray
+);
+
+console.log(combinedArray);
+
+// [1, 2, 3, 4]
+
+console.log(firstArray);
+
+// [1, 2]
+
+
+/*
+concat()
+-> creates a new array
+-> original arrays unchanged
+*/
+
+
+// ============================================================
+// 45. JOIN()
+// ============================================================
+
+const words = [
+    "Apple",
+    "Banana",
+    "Mango"
+];
+
+const joined = words.join("-");
+
+console.log(joined);
+
+// "Apple-Banana-Mango"
+
+
+/*
+Array -> String
+
+join()
+*/
+
+
+// ============================================================
+// 46. SPLIT()
+// ============================================================
+
+const text = "Apple-Banana-Mango";
+
+const splitResult = text.split("-");
+
+console.log(splitResult);
+
+// ["Apple", "Banana", "Mango"]
+
+
+/*
+String -> Array
+
+split()
+*/
+
+
+/*
+MEMORY:
+
+join()
+Array -> String
+
+split()
+String -> Array
+*/
+
+
+// ============================================================
+// 47. FOREACH()
+// ============================================================
+
+const forEachNumbers = [1, 2, 3];
+
+const forEachResult = forEachNumbers.forEach(
+    num => num * 2
+);
+
+console.log(forEachResult);
+
+// undefined
+
+
+/*
+forEach()
+-> executes function for each item
+-> does NOT return a new array
+
+
+map()
+-> returns a new array
+*/
+
+
+// ============================================================
+// 48. FOREACH() WITH RETURN
+// ============================================================
+
+const numbersForEach = [1, 2, 3];
+
+numbersForEach.forEach(num => {
+
+    if (num === 2) {
+        return;
+    }
+
+    console.log(num);
+
+});
+
+
+/*
+OUTPUT:
+
+1
+3
+
+
+return inside forEach()
+-> skips current iteration
+
+It does NOT stop the entire loop.
+*/
+
+
+// ============================================================
+// 49. BREAK INSIDE FOREACH()
+// ============================================================
+
+/*
+
+This is INVALID:
+
+numbers.forEach(num => {
+
+    if (num === 2) {
+        break;
+    }
+
+});
+
+
+break cannot be used inside a forEach callback.
+
+Use:
+
+for
+while
+do...while
+
+when you need break.
+*/
+
+
+// ============================================================
+// 50. FOR...OF
+// ============================================================
+
+const valuesArray = [10, 20, 30];
+
+for (const value of valuesArray) {
+
+    console.log(value);
+
+}
+
+
+/*
+OUTPUT:
+
+10
+20
+30
+
+
+for...of
+-> gives VALUES
+*/
+
+
+// ============================================================
+// 51. FOR...IN
+// ============================================================
+
+const valuesArray2 = [10, 20, 30];
+
+for (const index in valuesArray2) {
+
+    console.log(index);
+
+}
+
+
+/*
+OUTPUT:
+
+0
+1
+2
+
+
+for...in
+-> gives KEYS / INDEXES
+*/
+
+
+// ============================================================
+// 52. FOR...IN WITH OBJECT
+// ============================================================
+
+const personData = {
+
+    name: "Jack",
+    age: 25
+
+};
+
+for (const key in personData) {
+
+    console.log(key);
+
+}
+
+
+/*
+OUTPUT:
+
+name
+age
+
+
+for...in
+-> commonly used for object keys
+*/
+
+
+// ============================================================
+// 53. ARRAY DESTRUCTURING
+// ============================================================
+
+const numbersData = [10, 20, 30];
+
+const [first, second] = numbersData;
+
+console.log(first);
+// 10
+
+console.log(second);
+// 20
+
+
+// ============================================================
+// 54. ARRAY REST
+// ============================================================
+
+const arrayData = [10, 20, 30, 40];
+
+const [
+    firstValue,
+    ...remainingValues
+] = arrayData;
+
+console.log(firstValue);
+
+// 10
+
+console.log(remainingValues);
+
+// [20, 30, 40]
+
+
+/*
+...remainingValues
+-> collects remaining elements
+*/
+
+
+// ============================================================
+// 55. OBJECT SPREAD ORDER
+// ============================================================
+
+const userData = {
+
+    name: "Jack",
+    age: 25
+
+};
+
+
+const updatedData = {
+
+    ...userData,
+    age: 30
+
+};
+
+console.log(updatedData);
+
+/*
+{
+    name: "Jack",
+    age: 30
+}
+*/
+
+
+/*
+IMPORTANT:
+
+Later property wins.
+*/
+
+
+// ============================================================
+// 56. OBJECT SPREAD - REVERSE ORDER
+// ============================================================
+
+const updatedData2 = {
+
+    age: 30,
+    ...userData
+
+};
+
+console.log(updatedData2);
+
+/*
+{
+    age: 25,
+    name: "Jack"
+}
+*/
+
+
+/*
+Because:
+
+userData.age = 25
+
+and userData is spread AFTER age: 30.
+
+Later value wins.
+*/
+
+
+// ============================================================
+// 57. DEFAULT PARAMETERS
+// ============================================================
+
+function greet(name = "Guest") {
+
+    return `Hello ${name}`;
+
+}
+
+
+console.log(
+    greet()
+);
+
+// Hello Guest
+
+
+console.log(
+    greet("Jack")
+);
+
+// Hello Jack
+
+
+/*
+Default parameter is used when
+argument is undefined.
+*/
+
+
+// ============================================================
+// 58. DEFAULT PARAMETER - undefined vs null
+// ============================================================
+
+function welcome(name = "Guest") {
+
+    return name;
+
+}
+
+
+console.log(
+    welcome(undefined)
+);
+
+// Guest
+
+
+console.log(
+    welcome(null)
+);
+
+// null
+
+
+/*
+IMPORTANT:
+
+undefined
+-> default value is used
+
+null
+-> default value is NOT used
+
+
+Default parameters trigger for:
+undefined
+
+Not for:
+null
+*/
+
+
+// ============================================================
+// 59. DEFAULT PARAMETERS WITH MULTIPLE VALUES
+// ============================================================
+
+function addNumbers(a, b = 10) {
+
+    return a + b;
+
+}
+
+
+console.log(
+    addNumbers(5)
+);
+
+// 15
+
+
+console.log(
+    addNumbers(5, undefined)
+);
+
+// 15
+
+
+console.log(
+    addNumbers(5, null)
+);
+
+// 5
+
+
+/*
+Why?
+
+5 + null
+
+null is converted to 0 in numeric addition.
+*/
+
+
+// ============================================================
+// 60. IMPORTANT ARRAY METHOD COMPARISON
+// ============================================================
+
+/*
+
+map()
+------------------------------------------------------------
+Purpose:
+Transform every element
+
+Returns:
+New array
+
+
+filter()
+------------------------------------------------------------
+Purpose:
+Select elements
+
+Returns:
+New array
+
+
+find()
+------------------------------------------------------------
+Purpose:
+Find first matching element
+
+Returns:
+Element / undefined
+
+
+findIndex()
+------------------------------------------------------------
+Purpose:
+Find position
+
+Returns:
+Index / -1
+
+
+some()
+------------------------------------------------------------
+Purpose:
+Check if at least one matches
+
+Returns:
+true / false
+
+
+every()
+------------------------------------------------------------
+Purpose:
+Check if all match
+
+Returns:
+true / false
+
+
+forEach()
+------------------------------------------------------------
+Purpose:
+Execute code for every element
+
+Returns:
+undefined
+
+
+reduce()
+------------------------------------------------------------
+Purpose:
+Combine into one result
+
+Returns:
+Single value
+*/
+
+
+// ============================================================
+// 61. MUTATING vs NON-MUTATING ARRAY METHODS
+// ============================================================
+
+/*
+MUTATES ORIGINAL ARRAY:
+
+push()
+pop()
+shift()
+unshift()
+splice()
+sort()
+reverse()
+
+
+DOES NOT MUTATE ORIGINAL:
+
+map()
+filter()
+find()
+findIndex()
+slice()
+concat()
+includes()
+indexOf()
+reduce()
+some()
+every()
+*/
+
+
+/*
+IMPORTANT FOR REACT:
+
+Prefer creating a new array/object
+instead of directly mutating state.
+
+Example:
+
+WRONG:
+
+users.push(newUser);
+
+
+BETTER:
+
+setUsers([
+    ...users,
+    newUser
+]);
+*/
+
+
+// ============================================================
+// 62. FINAL CORE JS MEMORY TABLE
+// ============================================================
+
+/*
+
+EQUALITY
+------------------------------------------------------------
+==      -> loose equality
+===     -> strict equality
+
+
+TYPE
+------------------------------------------------------------
+typeof null
+-> "object"
+
+Array.isArray([])
+-> true
+
+
+COPY
+------------------------------------------------------------
+Primitive
+-> copied by value
+
+Object/Array
+-> reference based
+
+
+ARRAY
+------------------------------------------------------------
+map()       -> transform
+filter()    -> select
+find()      -> first matching element
+findIndex() -> position
+some()      -> at least one
+every()     -> all
+includes()  -> exists?
+indexOf()   -> position
+slice()     -> extract/copy
+splice()    -> modify
+sort()      -> sort
+reverse()   -> reverse
+concat()    -> combine
+join()      -> array -> string
+forEach()   -> execute
+reduce()    -> one result
+
+
+LOOPS
+------------------------------------------------------------
+for...of
+-> values
+
+for...in
+-> keys/indexes
+
+
+DESTRUCTURING
+------------------------------------------------------------
+const { name } = user
+-> object property
+
+const [a, b] = array
+-> array values
+
+
+REST
+------------------------------------------------------------
+...rest
+-> collects remaining values
+
+
+SPREAD
+------------------------------------------------------------
+...obj
+-> copy/merge
+
+Later property
+-> wins
+
+
+DEFAULT PARAMETERS
+------------------------------------------------------------
+undefined
+-> default used
+
+null
+-> default NOT used
+
+
+MUTATING METHODS
+------------------------------------------------------------
+push()
+pop()
+shift()
+unshift()
+splice()
+sort()
+reverse()
+
+
+NON-MUTATING METHODS
+------------------------------------------------------------
+map()
+filter()
+find()
+findIndex()
+slice()
+concat()
+reduce()
+some()
+every()
+includes()
+indexOf()
+
+
+============================================================
+CORE JAVASCRIPT INTERVIEW CHECKLIST
+============================================================
+
+[✓] var / let / const
+[✓] Scope
+[✓] Hoisting
+[✓] TDZ
+[✓] == vs ===
+[✓] typeof
+[✓] null / undefined
+[✓] Primitive vs reference
+[✓] Object reference
+[✓] Array reference
+[✓] Shallow copy
+[✓] Deep copy
+[✓] Spread
+[✓] Object.assign()
+[✓] Destructuring
+[✓] Rest operator
+[✓] Optional chaining
+[✓] Nullish coalescing
+[✓] map()
+[✓] filter()
+[✓] reduce()
+[✓] find()
+[✓] findIndex()
+[✓] some()
+[✓] every()
+[✓] includes()
+[✓] indexOf()
+[✓] slice()
+[✓] splice()
+[✓] sort()
+[✓] reverse()
+[✓] concat()
+[✓] join()
+[✓] split()
+[✓] forEach()
+[✓] for...of
+[✓] for...in
+[✓] Array of objects
+[✓] Default parameters
+[✓] undefined vs null
+[✓] Promise
+[✓] async / await
+[✓] Event loop
+[✓] Microtasks
+[✓] Macrotasks
+[✓] React state immutability
 
 
 ============================================================

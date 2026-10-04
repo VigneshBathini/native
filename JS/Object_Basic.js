@@ -1245,3 +1245,16 @@ Need default for null/undefined?
       ??
 ============================================================
 */
+
+// 🧠 Remember these 3
+// const copy = user;
+
+// ➡️ No copy — same reference
+
+// const copy = { ...user };
+
+// ➡️ Shallow copy — nested objects shared
+
+// const copy = structuredClone(user);
+
+// ➡️ Deep copy — nested objects copied too
