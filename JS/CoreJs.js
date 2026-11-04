@@ -292,7 +292,7 @@ const numbers = [10, 20, 30, 40, 50];
 console.log(numbers[0]);
 
 
-// Add
+// Add last
 numbers.push(60);
 
 
@@ -328,11 +328,24 @@ const even = numbers.filter(num => num % 2 === 0);
 // reduce()
 // Produces one final result
 
+
 const total = numbers.reduce(
-    (sum, num) => sum + num,
-    0
+    (accumulator, currentValue) => {
+        return accumulator + currentValue;
+    },
+    initialValue
 );
 
+// const numbers = [10, 20, 30, 40];
+
+// const total = numbers.reduce(
+//     (sum, num) => sum + num,
+//     0
+// );
+
+// console.log(total); // 100
+
+// const total = numbers.reduce((sum, num) => sum + num, 0);
 
 // find()
 // Returns first matching element
@@ -550,7 +563,7 @@ SAME REFERENCE
 
 
 console.log(person === shallow);
-// false
+// false -> regarding refernce
 
 console.log(person.address === shallow.address);
 // true
@@ -563,10 +576,10 @@ console.log(person.address === shallow.address);
 const deep = structuredClone(person);
 
 console.log(person === deep);
-// false
+// false -> as here person and deep are indpeendent object
 
 console.log(person.address === deep.address);
-// false
+// false 
 
 
 /*
@@ -1219,9 +1232,7 @@ const correctMap2 = mapNumbers.map(
 const filterNumbers = [1, 2, 3, 4];
 
 const filterResult = filterNumbers.filter(num => {
-
     num > 2;
-
 });
 
 console.log(filterResult);
@@ -2403,3 +2414,35 @@ CORE JAVASCRIPT INTERVIEW CHECKLIST
 
 ============================================================
 */
+
+
+// Event Bubbling — Definition and Example
+// Definition: Event bubbling is when an event triggered on a child element travels upward to its parent elements in the DOM.
+
+// Example:
+// <div id="parent">
+//   <button id="child">Click Me</button>
+// </div>
+
+
+// document.getElementById("parent").addEventListener("click", () => {
+//   console.log("Parent clicked");
+// });
+
+// document.getElementById("child").addEventListener("click", () => {
+//   console.log("Button clicked");
+// });
+
+
+// When you click the button, the output is:
+// Button clicked
+// Parent clicked
+
+
+// Why? The button's handler runs first, then the event bubbles up to the parent div.
+
+// To stop bubbling:
+// event.stopPropagation();
+
+
+// Remember: Child → Parent = Event Bubbling.

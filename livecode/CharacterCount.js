@@ -21,12 +21,12 @@
 // Validation
 // String manipulation
 
-import {useState,useEffect} from "react";
-import {View,Text,TextInput,StyleSheet} from 'react-native'
+import { useState, useEffect } from "react";
+import { View, Text, TextInput, StyleSheet } from 'react-native'
 
-export default function CharcterCount(){
+export default function CharcterCount() {
 
-  const [text,setText] = useState("")
+  const [text, setText] = useState("")
   // const [count,setCount] = useState(0)
 
   const count = text.length;
@@ -36,36 +36,36 @@ export default function CharcterCount(){
   //   setCount(text.length)
   // },[text])
 
-  return(
+  return (
     <View style={styles.container}>
-    <TextInput 
-    placeholder="Max characters 100"
-    value={text}
-    onChangeText={setText}
-    style={[styles.text,
-      // count>=80? {color:'red'}:{color:'black'}
-    ]}
-    maxLength={100}
-    
-    />
+      <TextInput
+        placeholder="Max characters 100"
+        value={text}
+        onChangeText={setText}
+        style={[styles.text,
+          // count>=80? {color:'red'}:{color:'black'}
+        ]}
+        maxLength={100}
 
-    <Text style={{
-color:count>=80?'red':'black'
-}}> {count<100?count +'/100':'Characters limit rached'}</Text>
+      />
+
+      <Text style={{
+        color: count >= 80 ? 'red' : 'black'
+      }}> {count < 100 ? count + '/100' : 'Characters limit rached'}</Text>
     </View>
   )
 }
 
-const styles= StyleSheet.create({
-  container:{
-    flex:1,
-    justifyContent:'center',
-    alignItems:'center'
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  text:{
-    borderWidth:1,
-    paddingVertical:10,
-    paddingHorizontal:20
+  text: {
+    borderWidth: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 20
   }
 })
 

@@ -370,12 +370,19 @@ const user1 = {
 
 // Copy + update
 
-const updated1 = Object.assign({}, user1, {
+const updated1 = Object.assign({}, user1, {    //only update new object
     age: 30,
     city: "Hyderabad"
 });
 
 console.log(updated1);
+
+// const updated1 = Object.assign( user1, {   //without {} will update original object too  
+//     age: 30,
+//     city: "Hyderabad"
+// });
+
+// console.log(updated1);
 
 
 /*

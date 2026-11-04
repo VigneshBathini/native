@@ -73,11 +73,11 @@ for (let i = 0; i < numbers1.length; i++) {
 // IMPORTANT INTERVIEW QUESTION
 // ============================================================
 
-for (let i = 0; i < 3; i++) {
-  setTimeout(() => {
-    console.log(i);
-  }, 1000);
-}
+  for (let i = 0; i < 3; i++) {
+    setTimeout(() => {
+      console.log(i);
+    }, 1000);
+  }
 
 // Output after approximately 1 second:
 //

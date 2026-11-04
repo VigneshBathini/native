@@ -14,7 +14,7 @@ sayHello();
 
 function sayHello() {
   console.log("Hello");
-}
+} 
 
 // Output:
 // Hello
