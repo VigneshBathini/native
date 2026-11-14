@@ -16,6 +16,7 @@ export default function app() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
     const [refreshing, setRefreshing] = useState(false)
+    const [visibleCount,setVisibleCount] = useState(3)
 
     const isFetching = useRef(false)
 
@@ -31,6 +32,7 @@ export default function app() {
 
             if (isRefresh) {
                 setRefreshing(true)
+                setVisibleCount(3)
             } else {
                 setLoading(true)
             }
@@ -54,17 +56,23 @@ export default function app() {
         }
     }
 
+    const loadMore=()=>{
+        setVisibleCount(prev=>prev+3)
+    }
     return (
         <View>
-            <Button title='Fetch users' onPress={() => fetchUsers()} disabled={loading} />
+            <Button title='Fetch users' onPress={() => fetchUsers()}   disabled={loading || refreshing}/>
             {loading && <ActivityIndicator size={'large'} />}
 
             {error && <Text>{error}
             </Text>}
 
+            {users.length>0||users.length > visibleCount &&
+                <Button title = 'Load more' onPress={()=>{loadMore()}}/>
+            }   
             {!error && !loading &&
                 <FlatList
-                    data={users}
+                    data={users.slice(0,visibleCount)}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
                         <View>
