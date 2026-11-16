@@ -1607,3 +1607,669 @@ D. Mark payment failed immediately.
 **Preparation goal:** Clear the NPCI BHIM 90-minute HackerRank assessment using JavaScript.
 
 **Preparation rule:** Understand the logic, write the solution independently, test edge cases and practise under time limits.
+
+---
+
+# PART 13 – UPI FUNDAMENTALS AND PAYMENT ARCHITECTURE
+
+## 1. What is UPI?
+
+**UPI = Unified Payments Interface**
+
+UPI is a payment system that enables instant bank-to-bank money transfers through supported UPI applications.
+
+### Important points
+
+- UPI is a payment system, not a bank.
+- It enables money transfers between participating bank accounts.
+- Users can send and receive money using UPI applications.
+- UPI supports person-to-person and person-to-merchant payments.
+
+**Remember:** UPI is the payment infrastructure, not an individual mobile application.
+
+---
+
+## 2. What is NPCI?
+
+**NPCI = National Payments Corporation of India**
+
+NPCI operates the UPI payment network and facilitates transactions between participating banks and payment applications.
+
+### Important points
+
+- NPCI operates the UPI infrastructure.
+- It facilitates payment transactions.
+- It does not maintain every customer's individual bank account.
+- It is not the same as a UPI application such as Google Pay or PhonePe.
+
+**Remember:** NPCI operates the UPI network.
+
+---
+
+## 3. What is PSP?
+
+**PSP = Payment Service Provider**
+
+In the UPI ecosystem, a PSP bank provides UPI services and banking connectivity to participating third-party UPI applications.
+
+### Important points
+
+- PSP banks participate in the UPI ecosystem.
+- They provide banking connectivity for UPI applications.
+- A PSP bank and the customer's account-holding bank are not necessarily the same.
+
+**Remember:** PSP bank = Banking connectivity for UPI applications.
+
+---
+
+## 4. What is TPAP?
+
+**TPAP = Third Party Application Provider**
+
+A TPAP is a company that provides a customer-facing UPI application in partnership with a PSP bank.
+
+### Examples
+
+- Google Pay
+- PhonePe
+- Amazon Pay
+
+### Important points
+
+- TPAP provides the UPI application experience.
+- It works in partnership with PSP bank(s).
+- The TPAP itself is not the customer's bank.
+- It does not independently operate the entire NPCI network.
+
+**Remember:** TPAP = Customer-facing UPI application.
+
+---
+
+## 5. Payer and Payee
+
+These terms identify the people involved in a payment transaction.
+
+| Term | Meaning |
+|---|---|
+| Payer | Person who sends money |
+| Payee | Person who receives money |
+
+### Example
+
+You send ₹1,000 to your friend.
+
+- You = Payer
+- Your friend = Payee
+
+---
+
+## 6. Remitter Bank and Beneficiary Bank
+
+These terms identify the banks involved in a transaction.
+
+| Term | Meaning |
+|---|---|
+| Remitter Bank | Bank from which money is sent |
+| Beneficiary Bank | Bank into which money is received |
+
+### Example
+
+You send ₹2,000 from your ICICI account to someone's Axis Bank account.
+
+- Payer = You
+- Payee = Receiver
+- Remitter Bank = ICICI Bank
+- Beneficiary Bank = Axis Bank
+
+**Remember:**
+
+- Remitter = Sender's bank.
+- Beneficiary = Receiver's bank.
+
+---
+
+## 7. What is VPA?
+
+**VPA = Virtual Payment Address**
+
+A VPA is an address used to identify a UPI account for sending and receiving money.
+
+### Example
+
+```text
+vignesh@okaxis
+```
+
+Here:
+
+- `vignesh` = Identifier
+- `okaxis` = UPI handle
+
+### Benefits
+
+- Users can send money without entering the receiver's bank account number.
+- Users do not need to share their bank account number and IFSC for a typical VPA-based payment.
+- It identifies the UPI address used for the transaction.
+
+**Remember:** VPA = UPI payment address.
+
+---
+
+## 8. What is UPI PIN?
+
+A UPI PIN is a secret authentication PIN used to authorize UPI transactions.
+
+### Important points
+
+- It is used to authorize payments.
+- It is not the same as a mobile screen-lock PIN.
+- Never share your UPI PIN.
+- A merchant React Native application must never collect or store the user's UPI PIN.
+- The trusted UPI application or authorized payment flow handles this authentication.
+
+### Example payment flow
+
+1. User enters the payment amount.
+2. User selects a UPI payment option.
+3. A trusted UPI application handles the payment.
+4. User enters the UPI PIN in that trusted flow.
+5. The transaction is processed.
+
+**Remember:** UPI PIN = Authorizes the UPI transaction.
+
+---
+
+## 9. P2P vs P2M
+
+UPI supports different transaction types.
+
+### P2P – Person to Person
+
+Money transferred between two individuals.
+
+Example: You send ₹500 to your friend.
+
+### P2M – Person to Merchant
+
+Money transferred from an individual to a business or merchant.
+
+Example: You scan a supermarket QR code and pay ₹1,500.
+
+| Type | Meaning | Example |
+|---|---|---|
+| P2P | Person to Person | Sending money to a friend |
+| P2M | Person to Merchant | Paying a shopkeeper |
+
+**Remember:**
+
+- P2P = Person to Person.
+- P2M = Person to Merchant.
+
+---
+
+# PART 14 – UPI PAYMENT METHODS
+
+## 1. UPI Intent
+
+UPI Intent allows a merchant application to launch a compatible UPI application to complete a payment.
+
+### Example
+
+A user opens your React Native application and clicks:
+
+```text
+Pay ₹500
+```
+
+Your application initiates a UPI payment intent, which can launch a compatible UPI application.
+
+The user completes the payment in that application.
+
+### Important points
+
+- Your app initiates the payment.
+- A compatible UPI application handles the payment flow.
+- The user reviews the payment details.
+- The user authorizes the payment using their UPI PIN.
+- Your application can receive a return response.
+- The backend must verify the actual payment status.
+
+**Remember:** UPI Intent = Launching a compatible UPI app to complete a payment.
+
+---
+
+## 2. UPI QR
+
+UPI QR is another way to initiate a UPI payment.
+
+### Example
+
+1. Customer scans a restaurant's QR code.
+2. UPI application identifies the payment details.
+3. Customer reviews the payment.
+4. Customer authorizes the payment.
+5. Payment is processed.
+
+### UPI Intent vs UPI QR
+
+| UPI Intent | UPI QR |
+|---|---|
+| App initiates payment through an intent | User scans a QR code |
+| Launches a compatible UPI app | QR identifies payment details |
+| Uses app-to-app communication | Uses QR scanning |
+
+---
+
+## 3. UPI Intent Flow in React Native
+
+### Basic architecture
+
+```text
+React Native Application
+          |
+          | User clicks Pay ₹500
+          |
+          v
+Android Linking / Intent
+          |
+          v
+Compatible UPI Application
+          |
+          | User reviews payment
+          | User enters UPI PIN
+          |
+          v
+Payment Processing
+          |
+          v
+Return Response / Callback
+          |
+          v
+React Native Application
+          |
+          v
+Backend Payment Verification
+```
+
+### React Native concepts involved
+
+| Concept | Purpose |
+|---|---|
+| Linking API | Open another application |
+| Deep Linking | Return to your application through a supported URL |
+| AppState | Detect when the app becomes active again |
+| Backend Verification | Confirm the actual payment status |
+
+### Important points
+
+- React Native does not directly connect to NPCI's internal APIs.
+- The app initiates the payment through a supported UPI flow.
+- Returning to the React Native application does not guarantee payment success.
+- A callback response should not be treated as final payment proof.
+
+---
+
+# PART 15 – PAYMENT CALLBACK AND BACKEND VERIFICATION
+
+## 1. What is a Payment Callback?
+
+A callback is a response received by an application after a payment flow returns control to it.
+
+### Example
+
+1. User clicks Pay ₹500.
+2. UPI application opens.
+3. User completes or cancels the payment.
+4. UPI application returns to the merchant application.
+5. Merchant application receives a response.
+
+The response may contain a payment status such as SUCCESS, FAILED or another status, depending on the integration.
+
+### Important warning
+
+**A mobile callback alone is not reliable proof of payment.**
+
+It may be manipulated, incomplete or received before the final transaction status is known.
+
+---
+
+## 2. Correct Payment Verification Flow
+
+```text
+React Native App
+       |
+       | Initiate Payment
+       v
+Payment Provider / UPI Flow
+       |
+       | Payment Processing
+       v
+Return Response / Callback
+       |
+       v
+React Native App
+       |
+       | Send Transaction ID
+       v
+Node.js Backend
+       |
+       | Verify with Authorized Provider
+       v
+Payment Status Confirmation
+       |
+       v
+MySQL Database
+       |
+       v
+Update Order Status
+```
+
+### Important points
+
+- Do not trust the frontend callback alone.
+- Verify payment through the backend and authorized payment provider.
+- Use the provider's verified payment status.
+- Update the order only after successful verification.
+- Handle pending and failed payments separately.
+
+**Remember:** Backend verification is required before marking an order as paid.
+
+---
+
+# PART 16 – PAYMENT GATEWAY / PROVIDER
+
+## 1. What is a Payment Gateway?
+
+A Payment Gateway / Payment Provider helps a merchant integrate payment methods such as:
+
+- UPI
+- Debit and credit cards
+- Net banking
+- Other supported payment methods
+
+### Examples
+
+- Razorpay
+- Cashfree Payments
+- PayU
+
+### Important distinction
+
+| Component | Responsibility |
+|---|---|
+| NPCI | Operates the UPI network |
+| PSP Bank | Provides banking connectivity for UPI applications |
+| TPAP | Provides the customer-facing UPI application |
+| Payment Provider | Offers merchant payment integration and processing services |
+| Merchant Backend | Manages orders and verifies payment status |
+
+**Remember:** A payment gateway/provider is not the same as NPCI.
+
+---
+
+## 2. Payment Gateway Architecture
+
+### Example
+
+Imagine your AFMC Mess application wants to collect ₹500 from a user.
+
+```text
+React Native Application
+          |
+          | User clicks Pay ₹500
+          |
+          v
+Node.js / Express Backend
+          |
+          | Create Payment Order
+          |
+          v
+Payment Provider
+          |
+          | Process Payment
+          |
+          v
+Payment Status / Webhook
+          |
+          v
+Node.js Backend
+          |
+          | Verify Payment
+          |
+          v
+MySQL Database
+          |
+          v
+Update Order as PAID
+```
+
+### Explanation
+
+**Step 1 – React Native**
+
+User enters the amount and clicks the Pay button.
+
+**Step 2 – Backend**
+
+React Native sends a payment request to the Node.js backend.
+
+**Step 3 – Payment Provider**
+
+The backend communicates with the payment provider to create a payment request.
+
+**Step 4 – Payment Processing**
+
+The provider processes the payment through its supported payment flow.
+
+**Step 5 – Verification**
+
+The backend verifies the payment status with the provider or through an authenticated webhook.
+
+**Step 6 – Database**
+
+The backend updates the payment and order status in MySQL.
+
+---
+
+## 3. Important Security Rule
+
+Never store payment provider secret keys inside:
+
+- React Native JavaScript code.
+- Android application configuration.
+- Public GitHub repositories.
+- Client-side environment variables bundled into the application.
+
+Store secret keys securely on the backend using environment variables or an appropriate secrets-management solution.
+
+Example:
+
+```env
+PAYMENT_PROVIDER_KEY=your_secret_key
+```
+
+The React Native application should communicate with your backend instead of exposing provider secrets.
+
+---
+
+# PART 17 – REACT NATIVE PAYMENT INTEGRATION CONCEPTS
+
+These are the React Native concepts we need to practise next.
+
+| Concept | Why it is needed |
+|---|---|
+| Linking API | Launch another application |
+| Deep Linking | Receive a return link |
+| AppState | Detect when the app becomes active |
+| fetch / Axios | Communicate with backend |
+| useState | Manage loading and payment status |
+| try / catch / finally | Handle asynchronous errors |
+| Expo Development Build | Support native integrations that require native configuration |
+
+### Expo Go vs Development Build
+
+**Expo Go**
+
+- Useful for learning and building UI.
+- Useful for basic API integration.
+- Does not support every native payment SDK or custom native configuration.
+
+**Expo Development Build**
+
+- Supports custom native modules and configuration.
+- Useful when integrating native payment SDKs.
+- Can be built using EAS Build.
+
+**Remember:** A native payment SDK integration may require an Expo Development Build rather than Expo Go.
+
+---
+
+# PART 18 – PAYMENT ARCHITECTURE REVISION TABLE
+
+| Term | Meaning |
+|---|---|
+| UPI | Unified Payments Interface |
+| NPCI | National Payments Corporation of India |
+| PSP | Payment Service Provider |
+| TPAP | Third Party Application Provider |
+| VPA | Virtual Payment Address |
+| Payer | Person sending money |
+| Payee | Person receiving money |
+| Remitter Bank | Sender's bank |
+| Beneficiary Bank | Receiver's bank |
+| UPI PIN | Authorizes UPI transaction |
+| P2P | Person to Person |
+| P2M | Person to Merchant |
+| UPI Intent | Launch compatible UPI application |
+| UPI QR | QR-based payment initiation |
+| Payment Gateway | Merchant payment integration service |
+| Callback | Response returned to application |
+| Backend Verification | Confirms payment status with provider |
+
+---
+
+# PART 19 – OUR UPI LEARNING PROGRESS
+
+## Completed lessons
+
+| Lesson | Topic | Status |
+|---|---|---|
+| 1.1 | What is UPI? | Learned |
+| 1.2 | What is NPCI? | Learned |
+| 1.3 | What is PSP? | Learned |
+| 1.4 | What is TPAP? | Learned |
+| 1.5 | Payer and Payee | Learned |
+| 1.6 | Remitter and Beneficiary Bank | Learned |
+| 1.7 | VPA | Learned |
+| 1.8 | UPI PIN | Learned |
+| 1.9 | P2P and P2M | Learned |
+| 1.10 | UPI Intent and QR introduction | Learned |
+| 1.10 | Callback and Backend Verification | Learned / Introduced |
+| 1.11 | Payment Gateway / Provider | In Progress |
+
+### Knowledge check progress
+
+- UPI fundamentals and architecture questions Q1–Q11: Correct.
+- Payment Provider question Q12: Pending.
+
+---
+
+# PART 20 – PENDING TOPICS AND NEXT PREPARATION PRIORITIES
+
+## A. UPI and Payment Architecture
+
+1. Complete Payment Gateway / Provider lesson.
+2. UPI Intent vs QR in more detail.
+3. UPI Collect flow.
+4. Payment transaction lifecycle.
+5. Payment states: INITIATED, PENDING, SUCCESS and FAILED.
+6. Order ID vs Transaction ID.
+7. Payment timeout scenarios.
+8. Return response and callback handling.
+
+## B. React Native Implementation
+
+1. Linking API with practical code.
+2. Android Intent handling.
+3. Deep Linking.
+4. AppState.
+5. Handle UPI application not installed.
+6. Handle user cancellation.
+7. Handle payment timeout.
+8. Display pending, success and failed screens.
+9. Expo Development Build and native configuration.
+
+## C. Backend Payment Processing
+
+1. Create Payment API.
+2. Create Order API.
+3. Payment Provider API integration.
+4. Backend payment verification.
+5. Webhook handling.
+6. Webhook signature verification.
+7. MySQL payment table design.
+8. Transaction status updates.
+
+## D. Advanced Payment Concepts
+
+1. Idempotency.
+2. Duplicate payment prevention.
+3. Retry mechanisms.
+4. Timeout handling.
+5. Reconciliation.
+6. Race conditions.
+7. Authentication and authorization.
+8. Secure API key management.
+9. Payment audit logs.
+
+## E. Practical Project
+
+Build a demo using:
+
+- React Native Expo
+- Node.js
+- Express.js
+- MySQL
+- Authorized Payment Provider Sandbox
+
+### Expected functionality
+
+1. Enter payment amount.
+2. Create order through backend.
+3. Initiate payment.
+4. Handle payment return response.
+5. Verify payment through backend.
+6. Store payment status in MySQL.
+7. Display success, pending or failed status.
+
+**Important:** Use a provider sandbox for practice. Production UPI integration requires the appropriate authorized provider arrangements.
+
+---
+
+# PART 21 – ONE-DAY PREPARATION PLAN
+
+| Block | Topics | Suggested time |
+|---|---|---:|
+| 1 | Revise UPI fundamentals | 30 min |
+| 2 | Payment architecture and lifecycle | 60 min |
+| 3 | React Native Linking, Deep Linking, AppState | 90 min |
+| 4 | Node.js APIs, verification and webhooks | 90 min |
+| 5 | Idempotency, retry, timeout and security | 60 min |
+| 6 | Practical architecture and revision | 90 min |
+
+### Final preparation goals
+
+By the end, be able to:
+
+1. Explain the UPI architecture.
+2. Explain NPCI, PSP and TPAP.
+3. Explain UPI Intent and QR.
+4. Explain how React Native launches a UPI application.
+5. Explain how the user returns to the application.
+6. Explain why callback success is not final payment proof.
+7. Explain backend verification and webhooks.
+8. Explain pending and failed transactions.
+9. Explain duplicate payment prevention.
+10. Explain how Expo supports native payment integrations.
+
+**Preparation rule:** Learn one concept, understand the flow, write a small example, and answer a tricky knowledge check before moving to the next concept.
