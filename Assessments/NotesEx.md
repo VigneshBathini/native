@@ -934,3 +934,676 @@ Always test these cases in HackerRank problems.
 **Preparation rule:** Every concept must be relevant to the NPCI BHIM 90-minute assessment. Focus on understanding, independently writing solutions, testing edge cases and solving within time limits.
 
 **Current checkpoint:** Second-largest number, Map fundamentals, Two Sum, frequency counting and basic Set operations have been practised. Continue with Set-based duplicate detection and then move to the next assessment-relevant coding pattern.
+
+
+# PART 8 – PRACTICAL CODING ROUND: QUESTIONS WITH SOLUTIONS
+
+## Q1. Two Sum – Using Map
+
+### Question
+
+Given an array and a target, return the indices of two numbers whose sum equals the target.
+
+Input:
+
+```javascript
+const nums = [2, 7, 11, 15];
+const target = 9;
+```
+
+Expected output:
+
+```javascript
+[0, 1]
+```
+
+### Correct solution
+
+```javascript
+function twoSum(nums, target) {
+    const map = new Map();
+
+    for (let i = 0; i < nums.length; i++) {
+        const needed = target - nums[i];
+
+        if (map.has(needed)) {
+            return [map.get(needed), i];
+        }
+
+        map.set(nums[i], i);
+    }
+
+    return [];
+}
+```
+
+### Explanation
+
+1. Create an empty Map.
+2. Traverse the array using a loop.
+3. Calculate the required number:
+
+```javascript
+const needed = target - nums[i];
+```
+
+4. Check whether the Map already contains that number.
+5. If found, return the stored index and current index.
+6. Otherwise, store the current number and its index.
+
+### Important concepts
+
+- `Map` stores key-value pairs.
+- Key = array number.
+- Value = array index.
+- `map.has()` checks whether a key exists.
+- `map.get()` retrieves the stored index.
+- Check before inserting to avoid using the same element twice.
+
+### Complexity
+
+- Time: O(n) average.
+- Space: O(n).
+
+**Practice result: 10/10**
+
+---
+
+## Q2. Second-Largest Distinct Number
+
+### Question
+
+Find the second-largest distinct number in an array.
+
+Input:
+
+```javascript
+const arr = [8, 8, 7, 7, 6, 6];
+```
+
+Expected output:
+
+```text
+7
+```
+
+### Correct solution
+
+```javascript
+function secondLargest(arr) {
+    let largest = -Infinity;
+    let secondLargest = -Infinity;
+
+    for (let i = 0; i < arr.length; i++) {
+
+        if (arr[i] > largest) {
+            secondLargest = largest;
+            largest = arr[i];
+
+        } else if (
+            arr[i] < largest &&
+            arr[i] > secondLargest
+        ) {
+            secondLargest = arr[i];
+        }
+    }
+
+    return secondLargest === -Infinity
+        ? null
+        : secondLargest;
+}
+```
+
+### Explanation
+
+Two variables are required:
+
+```javascript
+let largest = -Infinity;
+let secondLargest = -Infinity;
+```
+
+When a new largest number is found:
+
+```javascript
+secondLargest = largest;
+largest = arr[i];
+```
+
+When a number is smaller than the largest but greater than the current second largest:
+
+```javascript
+arr[i] < largest &&
+arr[i] > secondLargest
+```
+
+Update the second-largest value.
+
+### Important mistakes to avoid
+
+1. Use `arr[i]`, not an incorrectly named variable such as `a[i]`.
+2. JavaScript uses `-Infinity`, not `- infinity`.
+3. Use `arr[i] < largest` to exclude duplicates of the largest value.
+4. Use consistent variable names, such as `secondLargest`.
+5. Handle the case where no second distinct number exists.
+
+### Edge cases
+
+```javascript
+secondLargest([8, 8, 7]);    // 7
+secondLargest([5, 5, 5]);    // null
+secondLargest([-1, -2, -3]); // -2
+secondLargest([1, 2]);       // 1
+```
+
+### Complexity
+
+- Time: O(n).
+- Space: O(1).
+
+**Practice result: 6/10**
+
+**Revision focus:** Variable naming, conditions, distinct-value checking and return statements.
+
+---
+
+## Q3. First Non-Repeating Character in a String
+
+### Question
+
+Find the first character that occurs only once in a string.
+
+Input:
+
+```javascript
+const str = "swisss";
+```
+
+Expected output:
+
+```text
+w
+```
+
+### Correct solution
+
+```javascript
+function nonRepeat(str) {
+    const map = new Map();
+
+    // First pass: count character occurrences
+    for (const char of str) {
+        if (map.has(char)) {
+            map.set(char, map.get(char) + 1);
+        } else {
+            map.set(char, 1);
+        }
+    }
+
+    // Second pass: find first character with count 1
+    for (const char of str) {
+        if (map.get(char) === 1) {
+            return char;
+        }
+    }
+
+    return null;
+}
+```
+
+### Explanation
+
+This problem requires two passes.
+
+**First pass: Count occurrences**
+
+For `"swisss"`:
+
+| Character | Count |
+|---|---:|
+| s | 4 |
+| w | 1 |
+| i | 1 |
+
+**Second pass: Find the first character with count 1**
+
+- `s` has count 4.
+- `w` has count 1.
+- Return `w`.
+
+### Simplified counting expression
+
+```javascript
+map.set(char, (map.get(char) || 0) + 1);
+```
+
+Meaning:
+
+- If the character exists, retrieve its current count.
+- Otherwise, use 0.
+- Increase the count by 1.
+
+### Important concepts
+
+- `for...of` iterates through characters in a string.
+- `Map` stores each character and its frequency.
+- Two passes are useful when counting first and preserving original order for the result.
+- Return `null` if no non-repeating character exists.
+
+### Complexity
+
+- Time: O(n).
+- Space: O(k), where k is the number of distinct characters.
+
+**Practice result: 10/10**
+
+---
+
+## Q4. Debit Logic – Payment Scenario
+
+### Question
+
+Write a function that deducts an amount from an account balance.
+
+Requirements:
+
+1. If the amount is greater than the balance, return `"INSUFFICIENT_BALANCE"`.
+2. If the amount is invalid, return `"INVALID_AMOUNT"`.
+3. Otherwise, return the remaining balance.
+
+### Correct solution
+
+```javascript
+function debit(balance, amount) {
+
+    if (amount <= 0) {
+        return "INVALID_AMOUNT";
+    }
+
+    if (amount > balance) {
+        return "INSUFFICIENT_BALANCE";
+    }
+
+    return balance - amount;
+}
+```
+
+### Example
+
+```javascript
+console.log(debit(1000, 200));  // 800
+console.log(debit(1000, 1200)); // INSUFFICIENT_BALANCE
+console.log(debit(1000, 0));    // INVALID_AMOUNT
+console.log(debit(1000, -50));  // INVALID_AMOUNT
+```
+
+### Explanation
+
+**Step 1: Validate the amount**
+
+```javascript
+if (amount <= 0)
+```
+
+A debit amount must be positive.
+
+**Step 2: Check available balance**
+
+```javascript
+if (amount > balance)
+```
+
+Do not allow a debit that exceeds the available balance.
+
+**Step 3: Deduct the amount**
+
+```javascript
+return balance - amount;
+```
+
+### Production payment considerations
+
+- Validate that values are finite numbers.
+- Use integer minor units (paise) instead of floating-point rupee calculations.
+- Perform the actual balance validation and debit on the backend.
+- Use a database transaction for financial operations.
+
+**Practice result: 9/10**
+
+---
+
+## Q5. Prevent Duplicate Payment Submissions – Async/Await
+
+### Question
+
+Write an asynchronous payment function with these requirements:
+
+1. If a payment is already processing, return `"PAYMENT_IN_PROGRESS"`.
+2. Otherwise, start the payment.
+3. Handle success and failure.
+4. Reset the processing flag after success or failure.
+5. Simulate an API request using `await`.
+
+### Correct solution
+
+```javascript
+let isProcessing = false;
+
+async function makePayment() {
+
+    if (isProcessing) {
+        return "PAYMENT_IN_PROGRESS";
+    }
+
+    isProcessing = true;
+
+    try {
+        // Simulate API call
+        const response = await fetch("API");
+
+        if (!response.ok) {
+            throw new Error("Payment failed");
+        }
+
+        return "SUCCESS";
+
+    } catch (error) {
+        return "FAILED";
+
+    } finally {
+        isProcessing = false;
+    }
+}
+```
+
+### Explanation
+
+**1. Declare the processing flag**
+
+```javascript
+let isProcessing = false;
+```
+
+The flag is declared outside the function so multiple function calls share the same state.
+
+**2. Prevent duplicate submissions**
+
+```javascript
+if (isProcessing) {
+    return "PAYMENT_IN_PROGRESS";
+}
+```
+
+If a payment is already processing, do not start another request.
+
+**3. Set the flag before the API call**
+
+```javascript
+isProcessing = true;
+```
+
+This is important because the flag must be updated before the function reaches its first `await`.
+
+**4. Make the asynchronous request**
+
+```javascript
+const response = await fetch("API");
+```
+
+`await` waits for the Promise to settle.
+
+**5. Check HTTP response status**
+
+```javascript
+if (!response.ok) {
+    throw new Error("Payment failed");
+}
+```
+
+Important: `fetch()` does not automatically reject for HTTP error statuses such as 400 or 500. Check `response.ok`.
+
+**6. Handle errors**
+
+```javascript
+catch (error) {
+    return "FAILED";
+}
+```
+
+**7. Reset the processing flag**
+
+```javascript
+finally {
+    isProcessing = false;
+}
+```
+
+The `finally` block executes after success or failure.
+
+### Important concepts
+
+| Concept | Purpose |
+|---|---|
+| `async` | Defines an asynchronous function |
+| `await` | Waits for a Promise to settle |
+| `fetch()` | Sends an HTTP request |
+| `response.ok` | Checks HTTP success status |
+| `throw` | Raises an error |
+| `try` | Contains code that may fail |
+| `catch` | Handles errors |
+| `finally` | Runs after success or failure |
+| Boolean flag | Prevents repeated submissions in the current app instance |
+
+### Important payment security concept
+
+A frontend Boolean flag is not sufficient to guarantee duplicate-payment prevention.
+
+For production payment systems:
+
+- Generate a unique idempotency key for each payment request.
+- Send the key to the backend.
+- Enforce idempotency on the backend using database constraints and transaction handling.
+- If the same request is submitted again, return the existing transaction result instead of creating another debit.
+
+**Practice result: 10/10**
+
+---
+
+# PART 9 – IMPORTANT CONCEPTS REVISED IN THE PRACTICAL ROUND
+
+## 1. JavaScript Map – Frequency Counting
+
+```javascript
+const map = new Map();
+
+for (const char of str) {
+    map.set(char, (map.get(char) || 0) + 1);
+}
+```
+
+Purpose:
+
+- Count character occurrences.
+- Store numbers and indices.
+- Detect repeated values.
+- Solve Two Sum efficiently.
+
+## 2. JavaScript Loops
+
+**Traditional for loop**
+
+```javascript
+for (let i = 0; i < arr.length; i++) {
+    console.log(arr[i]);
+}
+```
+
+Useful when the array index is required.
+
+**for...of loop**
+
+```javascript
+for (const char of str) {
+    console.log(char);
+}
+```
+
+Useful when directly accessing array values or string characters.
+
+## 3. JavaScript Conditions
+
+```javascript
+if (condition1) {
+    // Execute when condition1 is true
+} else if (condition2) {
+    // Execute when condition2 is true
+} else {
+    // Execute when neither condition is true
+}
+```
+
+Important:
+
+- `if` checks the first condition.
+- `else if` checks another condition when the previous condition is false.
+- `else` handles the remaining case.
+
+## 4. Async/Await and Error Handling
+
+```javascript
+async function getData() {
+    try {
+        const response = await fetch("API");
+
+        if (!response.ok) {
+            throw new Error("Request failed");
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        console.log(error);
+
+    } finally {
+        console.log("Request completed");
+    }
+}
+```
+
+Remember:
+
+- `async` functions return Promises.
+- `await` pauses execution of that async function until the Promise settles.
+- `catch` handles errors.
+- `finally` executes whether the operation succeeds or fails.
+
+## 5. Frontend Duplicate Payment Prevention
+
+```javascript
+let isProcessing = false;
+
+if (isProcessing) {
+    return "PAYMENT_IN_PROGRESS";
+}
+
+isProcessing = true;
+```
+
+Reset the flag inside `finally`.
+
+Remember: Frontend protection improves user experience. Backend idempotency protects the actual payment transaction.
+
+---
+
+# PART 10 – PRACTICAL ROUND SCORECARD
+
+| Question | Topic | Score |
+|---|---|---:|
+| Q1 | Two Sum using Map | 10/10 |
+| Q2 | Second-largest distinct number | 6/10 |
+| Q3 | First non-repeating character | 10/10 |
+| Q4 | Debit logic | 9/10 |
+| Q5 | Duplicate payment prevention | 10/10 |
+| **Total** | **5 practical questions** | **45/50** |
+
+**Current practical score: 90%**
+
+### Strengths
+
+1. Map-based problem solving.
+2. Frequency counting.
+3. String traversal.
+4. Basic payment logic.
+5. Async/await and API error handling.
+6. Payment duplicate-submission prevention.
+
+### Areas requiring more practice
+
+1. Second-largest distinct number.
+2. Variable naming and syntax accuracy.
+3. Array edge cases.
+4. Writing conditions carefully.
+5. Timed independent coding.
+
+---
+
+# PART 11 – NEXT PRACTICAL QUESTION: PAYMENT TRANSACTION STATES
+
+## Q6. Handling a PENDING UPI Transaction
+
+### Question
+
+A UPI payment API returns the status:
+
+```text
+PENDING
+```
+
+What should the React Native application do?
+
+**Options:**
+
+A. Show payment successful immediately.
+
+B. Retry the debit API repeatedly until it returns success.
+
+C. Show payment pending and check the transaction status using the transaction ID.
+
+D. Mark payment failed immediately.
+
+### Status
+
+**Pending – Not yet answered.**
+
+---
+
+# PART 12 – UPDATED PREPARATION CHECKPOINT
+
+### Completed
+
+- Mock Test 1: 37/80.
+- Mock Test 2: 30/30.
+- Practical coding questions Q1–Q5: 45/50.
+- Two Sum using Map.
+- Second-largest distinct number.
+- First non-repeating character.
+- Debit logic.
+- Async payment handling.
+- Duplicate payment prevention.
+- `try/catch/finally`.
+- HTTP response validation using `response.ok`.
+- Frontend processing flag versus backend idempotency.
+
+### Next priorities
+
+1. Answer Q6 on pending UPI transaction handling.
+2. Continue payment lifecycle and transaction-state scenarios.
+3. Practise Set-based duplicate detection.
+4. Practise more array and string coding problems.
+5. Revise JavaScript Event Loop and Promises.
+6. Practise React Native payment API integration.
+7. Continue with timed practical coding exercises.
+
+**Preparation goal:** Clear the NPCI BHIM 90-minute HackerRank assessment using JavaScript.
+
+**Preparation rule:** Understand the logic, write the solution independently, test edge cases and practise under time limits.
