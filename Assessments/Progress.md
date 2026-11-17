@@ -381,3 +381,349 @@ We should not restart the completed lessons. Next is **Lesson 1.11 — Payment G
 My recommendation: Spend less time memorising definitions and more time understanding the complete transaction flow. That will help you explain the architecture and write practical React Native code.
 
 I can take you through the remaining lessons one at a time, with short explanations, code examples and quick knowledge checks.
+
+-----------------------------------------
+Concept	Current status
+React Native fundamentals	Revise
+New Architecture	Know – revise scenarios
+JavaScript ES6	Revise
+TypeScript	New / assess
+RxJS	New
+Jest	Revise
+HLD and LLD	New
+Android native integration	New / assess
+iOS native integration	New / assess
+Threads and performance	In progress
+Jenkins	New / assess
+Docker and Kubernetes	New / assess
+Gradle, Maven, Groovy	New / assess
+SonarQube and Checkmarx	New
+Git and code reviews	Revise
+Secure coding	Revise
+UPI and payment architecture	Know – practise scenarios
+
+------------
+We'll prioritise:
+- Must understand: React Native, JavaScript, TypeScript, RxJS, performance, architecture and testing.
+- Understand the basics: HLD/LLD, native integration, security and payment architecture.
+- Awareness level: Jenkins, Docker, Kubernetes, Gradle, Maven, Groovy, SonarQube and Checkmarx.
+
+------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+Correct!
+
+**B. Code signing verifies app authenticity and establishes trust for future app updates.**
+
+Android apps must be digitally signed before distribution.
+
+- Debug builds → Usually signed with a debug key.
+- Release builds → Signed with a release key.
+- Google Play → Uses app signing to manage distribution signing.
+
+# **NPCI React Native Preparation – Progress Tracker**
+
+Based on our discussions across the preparation sessions, here is the consolidated status.
+
+# **Preparation progress**
+
+# **Practised**
+
+Concepts covered through explanations and questions
+
+# **Pending**
+
+Topics requiring deeper learning or revision
+
+**Important:** Practised does not mean mastered. We still need scenario-based questions and coding exercises.
+
+## **1. React Native fundamentals and New Architecture**
+
+Covered – revise
+
+- React Native architecture
+- Legacy Bridge
+- JSI (JavaScript Interface)
+- Fabric renderer
+- TurboModules
+- Codegen
+- Bridgeless Mode
+- JavaScript thread
+- UI/Main thread
+- Shadow thread
+- JS thread blocking
+- FlatList optimization
+- React.memo, useMemo, useCallback
+- React Native lifecycle basics
+
+**Pending:**
+
+- Practical performance profiling
+- Advanced FlatList optimization
+- Native performance debugging
+- Memory leaks and debugging tools
+
+## **2. JavaScript and TypeScript**
+
+Practised
+
+- ES6 concepts
+- let, const, var
+- Closures and hoisting
+- Promises and async/await
+- Event loop
+- Microtasks and macrotasks
+- Promise.all, race, any
+- Array methods
+- Shallow copy vs deep copy
+- TypeScript basics
+- Interfaces and types
+- Generics
+
+**Pending:**
+
+- Error handling and edge cases
+- Advanced TypeScript
+- Practical coding problems
+- More revision of asynchronous JavaScript
+
+## **3. RxJS**
+
+Needs attention
+
+- Observable basics
+- Observer and Subscription
+- debounceTime
+- Basic operator understanding
+
+**Pending:**
+
+- switchMap
+- mergeMap
+- concatMap
+- exhaustMap
+- Subject and BehaviorSubject
+- catchError
+- retry
+- unsubscribe and memory leaks
+- Practical API search examples
+
+This is an important JD requirement.
+
+## **4. Native integration and mobile concepts**
+
+Practised
+
+- Native Modules
+- Android BiometricPrompt
+- iOS LocalAuthentication
+- Secure storage
+- Deep linking
+- Android App Links
+- iOS Universal Links
+- AppState
+- Foreground/background lifecycle
+
+**Pending:**
+
+- Native Android Java/Kotlin basics
+- iOS Swift/Objective-C basics
+- Native module implementation
+- Permissions and platform-specific handling
+- Native debugging
+
+## **5. Mobile and payment security**
+
+Practised
+
+- HTTPS / TLS
+- SSL certificate pinning
+- Secure token storage
+- API secret management
+- UPI PIN protection
+- MITM attacks
+- Authentication vs Authorization
+- JWT
+- Access token vs Refresh token
+- OWASP
+- SQL Injection
+- Parameterized queries
+- Payment verification
+- Idempotency keys
+
+**Pending:**
+
+- Payment lifecycle architecture
+- Webhook verification
+- Token rotation and expiration scenarios
+- Secure API implementation
+- UPI transaction failure and retry scenarios
+
+## **6. DevOps and Android build tools**
+
+Practised
+
+| Topic                  | Status    |
+| ---------------------- | --------- |
+| Jenkins / CI/CD        | Practised |
+| Docker                 | Practised |
+| Kubernetes             | Practised |
+| Gradle                 | Practised |
+| Maven                  | Practised |
+| SonarQube              | Practised |
+| APK / AAB              | Practised |
+| R8 / ProGuard          | Practised |
+| Debug / Release builds | Practised |
+| Android code signing   | Practised |
+
+**Pending:**
+
+- Jenkins pipeline practical understanding
+- Dockerfile and docker-compose
+- Kubernetes Pods, Deployments and Services revision
+- Groovy basics
+- Checkmarx
+- Git branching, merging and conflict resolution
+- Gradle build troubleshooting
+
+## **7. Remaining major topics from NPCI JD**
+
+High priority
+
+| Topic                                 | Status  |
+| ------------------------------------- | ------- |
+| Jest and React Native Testing Library | Pending |
+| HLD – High-Level Design               | Pending |
+| LLD – Low-Level Design                | Pending |
+| RxJS advanced operators               | Pending |
+| Native Android/iOS coding             | Pending |
+| State management and Redux            | Revise  |
+| Performance profiling                 | Pending |
+| Checkmarx                             | Pending |
+| Groovy                                | Pending |
+| Git advanced workflows                | Revise  |
+
+## **Recommended next learning order**
+
+Given the NPCI Senior React Native Developer JD, I suggest:
+
+1. **Jest and React Native Testing Library**
+
+   Unit testing, component testing, mocking APIs.
+2. **RxJS revision**
+
+   switchMap, mergeMap, concatMap, exhaustMap.
+3. **HLD and LLD**
+
+   Payment app architecture, component design, API flow.
+4. **Native Android and iOS**
+
+   Java/Kotlin, Swift, native modules.
+5. **Performance and debugging**
+
+   Profiling, memory leaks, Flipper alternatives, Logcat.
+6. **DevOps remaining topics**
+
+   Groovy, Checkmarx, Git and Jenkins pipeline.
+7. **Final revision**
+
+   Project explanation, practical scenarios and technical questions.
+
+## **Let's continue**
+
+We have completed the basic DevOps tool questions. One remaining important topic is Checkmarx.
+
+**Next question: What is Checkmarx mainly used for?**
+
+A. Automating Android APK builds.
+
+B. Static Application Security Testing (SAST) to identify security vulnerabilities in source code.
+
+C. Managing Docker containers.
+
+D. Managing React Native navigation.
+
+We'll continue with your preferred approach: **Learn → Tiny example → Tricky check → Move to next topic.**
+
+-----------------------------
+## **NPCI React Native preparation – Current progress**
+
+You've covered a good range of React Native testing concepts. Here's the updated tracker.
+
+### **1. Testing topics**
+
+| Topic                                   | Current status |
+| --------------------------------------- | -------------- |
+| Jest fundamentals                       | Practised      |
+| Unit vs Integration testing             | Practised      |
+| React Native Testing Library            | Practised      |
+| API mocking – success/failure           | Practised      |
+| Async testing – `waitFor()`             | Practised      |
+| Snapshot testing                        | Practised      |
+| Code coverage                           | Practised      |
+| User interactions – `fireEvent.press()` | Practised      |
+| Loading and error states                | Practised      |
+| `getByText()`                           | Practised      |
+| `queryByText()`                         | Practised      |
+| `findByText()`                          | Practised      |
+| `beforeEach()`                          | Needs revision |
+| `afterEach()`                           | Needs revision |
+| `beforeAll()`                           | Needs revision |
+| `afterAll()`                            | Needs revision |
+
+### **2. Important concepts to revise**
+
+**Jest lifecycle methods**
+
+| Method         | Execution             |
+| -------------- | --------------------- |
+| `beforeEach()` | Before every test     |
+| `afterEach()`  | After every test      |
+| `beforeAll()`  | Once before all tests |
+| `afterAll()`   | Once after all tests  |
+
+You confused `beforeAll()` and `afterAll()` in the recent checks. We'll revisit these.
+
+**React Native Testing Library**
+
+```
+getByText()    // Finds immediately; throws if missing
+queryByText()  // Returns null if missing
+findByText()   // Waits for element asynchronously
+```
+
+### **3. Overall preparation tracker**
+
+| Major area                           | Status                      |
+| ------------------------------------ | --------------------------- |
+| React Native New Architecture        | Practised well              |
+| Native Modules & device integrations | Practised                   |
+| Payment app security                 | Practised                   |
+| Android build & DevOps               | Practised                   |
+| Git & GitHub workflows               | Practised                   |
+| Jest & RN testing                    | Practised; revision pending |
+| RN threads & performance             | Pending deeper revision     |
+| Redux / state management             | Pending revision            |
+| App architecture & scalability       | Pending                     |
+| Debugging & production monitoring    | Pending                     |
+| JavaScript advanced concepts         | Revision pending            |
+
+### **4. Recommended next steps**
+
+1. Finish Jest lifecycle methods.
+2. Practise one small React Native component testing example.
+3. Revisit RN threads and performance.
+4. Cover Redux, app architecture and scalability.
+5. Revise security, Git, Android builds and New Architecture.
+
+**My recommendation:** Finish testing today, but don't spend too much time on Jest. For the NPCI React Native role, prioritize React Native performance, native integrations, security, debugging and architecture.
+
+We'll continue one question at a time, and I'll keep topics marked as Practised until you demonstrate consistent understanding.

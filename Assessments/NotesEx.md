@@ -2732,3 +2732,1317 @@ Answer: TurboModules.
 **Current checkpoint:** React Native Architecture and New Architecture fundamentals completed. Resume with **Lesson 1 – JavaScript Thread**.
 
 **Learning rule:** Learn one concept, understand the flow, use a practical React Native example, answer a knowledge-check question, and move forward only after understanding.
+
+# PART 23 – REACT NATIVE THREADS AND PERFORMANCE (FUNDAMENTALS)
+
+## 1. What are Threads in React Native?
+
+React Native uses different threads to handle JavaScript execution, native UI operations and layout calculations.
+
+Each thread has a different responsibility.
+
+Understanding threads is important because blocking one thread can affect application performance.
+
+### Main threads
+
+| Thread | Responsibility |
+|---|---|
+| JavaScript Thread | Executes JavaScript code and React application logic |
+| UI Thread / Main Thread | Handles native UI operations and view updates |
+| Shadow Thread | Calculates component layouts using the Yoga layout engine |
+
+---
+
+## 2. JavaScript Thread
+
+The JavaScript Thread is where most React Native JavaScript code executes.
+
+### Responsibilities
+
+- Executes JavaScript business logic.
+- Processes event handlers such as `onPress`.
+- Handles React state updates.
+- Processes API responses.
+- Executes React component rendering and reconciliation work.
+
+### Example
+
+```jsx
+const handlePress = () => {
+  console.log("Button clicked");
+
+  setCount(prevCount => prevCount + 1);
+};
+```
+
+When the user presses a button, JavaScript executes the event handler and processes the state update.
+
+### What happens when the JavaScript Thread is blocked?
+
+Consider a heavy synchronous calculation:
+
+```jsx
+const handlePress = () => {
+  let total = 0;
+
+  for (let i = 0; i < 1000000000; i++) {
+    total += i;
+  }
+
+  console.log(total);
+};
+```
+
+While this calculation executes, other JavaScript tasks must wait.
+
+### Possible effects
+
+- Button actions become delayed.
+- API response handling gets delayed.
+- React state updates are delayed.
+- JS-driven animations may become jerky.
+
+**Important:** The app does not automatically move heavy JavaScript calculations to the UI Thread.
+
+### How to prevent blocking?
+
+- Avoid heavy synchronous calculations.
+- Optimise unnecessary component re-renders.
+- Use FlatList for large lists.
+- Use React.memo, useMemo and useCallback appropriately.
+- Move suitable heavy processing to native modules or background processing where appropriate.
+
+---
+
+## 3. UI Thread / Main Thread
+
+The UI Thread is responsible for native UI operations.
+
+### Responsibilities
+
+- Handles native view operations.
+- Displays and updates native UI components.
+- Processes native touch interactions.
+- Supports native-driven animations.
+
+### Example
+
+Consider a payment screen displaying a Pay Now button.
+
+The native UI is displayed and managed through UI operations.
+
+### Important performance concept
+
+If a native-driven animation is already running on the UI Thread, it can continue even when the JavaScript Thread is busy.
+
+This is because the UI Thread and JavaScript Thread have separate responsibilities.
+
+---
+
+## 4. Shadow Thread
+
+The Shadow Thread is responsible for calculating the layout of React Native components.
+
+React Native uses the Yoga layout engine to calculate layouts based on Flexbox rules.
+
+### Responsibilities
+
+- Calculates component positions.
+- Calculates width and height.
+- Handles alignment.
+- Calculates layout based on parent and child relationships.
+
+### Example
+
+```jsx
+<View
+  style={{
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  }}
+>
+  <Text>Pay Now</Text>
+</View>
+```
+
+The layout system calculates where the Text component should appear and how it should be positioned.
+
+---
+
+## 5. Difference Between JavaScript, UI and Shadow Threads
+
+| Feature | JavaScript Thread | UI Thread | Shadow Thread |
+|---|---|---|---|
+| Main responsibility | JS execution | Native UI operations | Layout calculation |
+| Handles business logic | Yes | No | No |
+| Handles JS event handlers | Yes | No | No |
+| Handles native UI operations | No | Yes | No |
+| Calculates layout | No | No | Yes |
+| Example | Button handler | Native button display | Button positioning |
+
+### Simplified conceptual flow
+
+```text
+User Interaction
+       |
+       v
+JavaScript Thread
+       |
+       v
+React State / Rendering
+       |
+       v
+Layout Calculation
+(Shadow / Yoga)
+       |
+       v
+UI Thread
+       |
+       v
+Native UI Update
+```
+
+**Note:** This is a simplified conceptual flow. Actual scheduling and rendering in the New Architecture are more sophisticated.
+
+---
+
+## 6. Real-world Payment Application Scenario
+
+Imagine a BHIM-like payment application.
+
+The user opens the payment history screen containing thousands of transactions.
+
+If the JavaScript Thread performs a heavy synchronous calculation:
+
+1. JavaScript becomes busy.
+2. User taps the Pay button.
+3. The JavaScript event handler may be delayed.
+4. API response processing may also be delayed.
+5. The screen may feel unresponsive.
+
+A native-driven animation may still continue on the UI Thread.
+
+### Technical discussion answer
+
+"If the JavaScript Thread is blocked by heavy synchronous operations, JavaScript event handlers, state updates and API response processing can be delayed. This can make the application feel unresponsive. We should optimise JavaScript execution, reduce unnecessary renders and use efficient list rendering."
+
+---
+
+## 7. ScrollView vs FlatList
+
+Consider a payment history screen containing 5,000 transactions.
+
+### ScrollView
+
+- Renders all its children.
+- Can consume more memory with large lists.
+- Not ideal for very large datasets.
+
+### FlatList
+
+- Uses virtualisation.
+- Renders items around the visible area and manages other items as needed.
+- More suitable for large lists.
+- Provides performance-related configuration options.
+
+| Feature | ScrollView | FlatList |
+|---|---|---|
+| Rendering | All children | Virtualised list |
+| Large datasets | Less suitable | More suitable |
+| Memory usage | Can be higher | More efficient when configured properly |
+| Best use | Small static content | Large or dynamic lists |
+
+### Example – FlatList
+
+```jsx
+import React from 'react';
+import {
+  FlatList,
+  Text,
+  View
+} from 'react-native';
+
+const transactions = [
+  { id: '1', amount: 500 },
+  { id: '2', amount: 1200 },
+  { id: '3', amount: 800 },
+];
+
+const TransactionList = () => {
+  return (
+    <FlatList
+      data={transactions}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <View>
+          <Text>₹{item.amount}</Text>
+        </View>
+      )}
+    />
+  );
+};
+
+export default TransactionList;
+```
+
+### Important FlatList properties
+
+| Property | Purpose |
+|---|---|
+| data | Array of records |
+| renderItem | Defines how each item is displayed |
+| keyExtractor | Provides a unique key for each item |
+| initialNumToRender | Number of items rendered initially |
+| maxToRenderPerBatch | Number of items rendered in each batch |
+| windowSize | Controls the number of visible-area windows rendered |
+| getItemLayout | Provides item dimensions when layout is fixed |
+
+### Optimisation example
+
+```jsx
+<FlatList
+  data={transactions}
+  keyExtractor={(item) => item.id}
+  renderItem={renderTransaction}
+  initialNumToRender={10}
+  windowSize={5}
+/>
+```
+
+These properties should be tuned based on actual performance testing and item size.
+
+---
+
+## 8. Questions Practised
+
+**Q1. What is the JavaScript Thread?**
+
+Answer: It executes JavaScript code, business logic, event handlers and React application work.
+
+**Q2. What happens when the JavaScript Thread is blocked?**
+
+Answer: JavaScript interactions, state updates and API response handling may be delayed.
+
+**Q3. What is the responsibility of the UI Thread?**
+
+Answer: It handles native UI operations and supports native-driven animations.
+
+**Q4. Can a native-driven animation continue when the JavaScript Thread is blocked?**
+
+Answer: Yes. It can continue on the UI Thread independently of JavaScript execution.
+
+**Q5. What is the Shadow Thread?**
+
+Answer: It handles component layout calculations using the Yoga layout engine.
+
+**Q6. What happens if we use ScrollView for 5,000 transaction records?**
+
+Answer: All children may be rendered, increasing rendering work and memory usage.
+
+**Q7. Which component is suitable for large lists?**
+
+Answer: FlatList, because it uses virtualisation.
+
+---
+
+## 9. Learning Progress
+
+| Topic | Status |
+|---|---|
+| JavaScript Thread | Fundamentals understood |
+| UI Thread | Fundamentals understood |
+| Shadow Thread | Fundamentals understood |
+| JS Thread blocking | Fundamentals understood |
+| Native-driven animations | Fundamentals understood |
+| ScrollView vs FlatList | Fundamentals understood |
+| FlatList optimisation properties | Introduced; needs practical revision |
+| React.memo | Pending |
+| useMemo | Pending |
+| useCallback | Pending |
+| Payment screen performance | Pending practical scenarios |
+
+**Note:** These topics are understood at the foundational level. Practical scenarios and further revision are needed before marking them mastered.
+
+---
+
+## 10. Next Topics to Cover
+
+1. FlatList optimisation in more detail.
+2. React.memo.
+3. useMemo.
+4. useCallback.
+5. Avoiding unnecessary re-renders.
+6. React Native performance debugging.
+7. Payment screen performance scenarios.
+
+**Learning rule:** Understand one concept, see a practical example, answer a knowledge-check question and then continue.
+
+# PART 24 – NATIVE INTEGRATION AND MOBILE APP LIFECYCLE
+
+## 1. Native Integration in React Native
+
+React Native allows JavaScript/TypeScript code to access native Android and iOS capabilities through native APIs and native modules.
+
+Examples of native functionality:
+
+- Biometric authentication.
+- Secure storage.
+- Camera and location.
+- Push notifications.
+- Deep linking.
+- Platform-specific functionality.
+
+### Android and iOS examples
+
+| Feature | Android | iOS |
+|---|---|---|
+| Biometric authentication | BiometricPrompt | LocalAuthentication |
+| Secure storage | Android Keystore-backed storage | Keychain |
+| Native platform | Android APIs | iOS APIs |
+
+**Remember:** React Native provides the application interface, while native modules provide access to platform-specific functionality.
+
+## 2. App Lifecycle
+
+A mobile application can move between different lifecycle states.
+
+| State | Meaning |
+|---|---|
+| Active | App is currently in the foreground |
+| Background | App is not currently visible |
+| Inactive | Temporary inactive state, mainly relevant on iOS |
+| Terminated | App process has stopped |
+
+### Example
+
+Suppose a user opens a payment application, switches to another app and then returns.
+
+1. App starts in the foreground.
+2. User switches to another app.
+3. Payment app moves to the background.
+4. User returns to the payment app.
+5. App becomes active again.
+
+### Important distinction
+
+- Background does not always mean the app process is terminated.
+- When the process is terminated, in-memory component state may be lost.
+- Important payment information should be stored and tracked by the backend, not only in React Native state.
+
+## 3. AppState API
+
+React Native provides the `AppState` API to detect application lifecycle changes.
+
+### Example
+
+```jsx
+import React, { useEffect } from 'react';
+import { AppState, Text } from 'react-native';
+
+const AppLifecycle = () => {
+
+  useEffect(() => {
+
+    const subscription = AppState.addEventListener(
+      'change',
+      (state) => {
+        console.log('App state:', state);
+      }
+    );
+
+    return () => subscription.remove();
+
+  }, []);
+
+  return <Text>App Lifecycle Example</Text>;
+};
+
+export default AppLifecycle;
+```
+
+### Important points
+
+- `AppState.currentState` gives the current app state.
+- `AppState.addEventListener('change', callback)` listens for changes.
+- `subscription.remove()` removes the listener and prevents unnecessary subscriptions.
+
+**Remember:** AppState helps detect whether the application is active or in the background.
+
+## 4. Payment Application Scenario
+
+Suppose a user initiates a payment and closes the app while the transaction is pending.
+
+What should happen?
+
+1. Backend continues tracking the transaction.
+2. Payment status is stored on the backend.
+3. User reopens the application.
+4. App becomes active.
+5. React Native fetches the latest payment status from the backend.
+6. App displays SUCCESS, FAILED or PENDING.
+
+**Important:** Do not depend only on `useState` for important payment transaction information.
+
+---
+
+# PART 25 – MOBILE APPLICATION SECURITY
+
+## 1. HTTPS and TLS
+
+**HTTPS** is HTTP communication protected using TLS encryption.
+
+It helps protect data exchanged between the mobile application and backend server.
+
+Examples of sensitive information:
+
+- Authentication tokens.
+- User information.
+- Transaction details.
+- API request and response data.
+
+**Remember:** HTTPS helps protect communication from interception and tampering.
+
+## 2. Certificate Pinning
+
+Certificate pinning adds an additional server identity check.
+
+The application checks whether the server's certificate or public key matches an expected value configured in the application.
+
+### Purpose
+
+- Helps protect against certain Man-in-the-Middle (MITM) attacks.
+- Adds an additional layer of server identity verification.
+
+| HTTPS/TLS | Certificate Pinning |
+|---|---|
+| Encrypts network communication and validates the server certificate chain | Adds an application-specific certificate or public-key check |
+| Standard secure communication | Additional security control |
+
+**Remember:** Certificate pinning does not replace HTTPS.
+
+## 3. Secure Token Storage
+
+Authentication tokens should be stored using secure platform-backed storage.
+
+| Platform | Secure storage |
+|---|---|
+| Android | Keystore-backed secure storage |
+| iOS | Keychain |
+
+Avoid storing sensitive authentication tokens in plain-text files or hardcoding them in application source code.
+
+### Important distinction
+
+- AsyncStorage is commonly used for non-sensitive persistent application data.
+- Keychain/Keystore-backed storage is preferred for sensitive credentials and tokens.
+
+## 4. API Secret Key Protection
+
+Private API secret keys must never be stored inside the React Native application.
+
+### Why?
+
+- Mobile application code can be inspected.
+- Application packages can be reverse-engineered.
+- Hardcoded secrets can potentially be extracted.
+
+### Correct approach
+
+Store private API keys on the backend using:
+
+- Environment variables.
+- A secure secrets manager.
+- Appropriate access controls.
+
+**Remember:** React Native frontend = public client. Backend = place for private API secrets.
+
+## 5. UPI PIN Protection
+
+The React Native application must never collect or store the user's UPI PIN.
+
+The UPI PIN is entered through the trusted UPI authorization flow.
+
+Never store a UPI PIN in:
+
+- AsyncStorage.
+- React state.
+- Local files.
+- Application database.
+
+## 6. Man-in-the-Middle (MITM) Attack
+
+A MITM attack occurs when an attacker attempts to intercept or manipulate communication between two parties.
+
+### Example
+
+A mobile application communicates with its backend server. An attacker attempts to intercept the communication and access or modify information.
+
+### Protection methods
+
+- HTTPS/TLS.
+- Certificate validation.
+- Certificate pinning where appropriate.
+- Proper authentication and authorization.
+- Secure backend implementation.
+
+## 7. Authentication vs Authorization
+
+| Authentication | Authorization |
+|---|---|
+| Verifies who the user is | Checks what the user is allowed to access |
+| Login, OTP, biometrics | Roles and permissions |
+| Example: Is this the correct user? | Example: Can this user access the admin screen? |
+
+**Remember:** Authentication = Who are you? Authorization = What can you access?
+
+## 8. JWT – JSON Web Token
+
+JWT is commonly used to transmit claims between parties, especially for authentication and authorization.
+
+A JWT has three parts:
+
+```text
+Header.Payload.Signature
+```
+
+| Part | Purpose |
+|---|---|
+| Header | Token type and signing algorithm |
+| Payload | Claims such as user ID and expiry |
+| Signature | Helps verify token integrity and authenticity |
+
+### Important security points
+
+- JWT payload is usually Base64URL-encoded, not encrypted by default.
+- Never store passwords or UPI PINs in a JWT payload.
+- Backend must verify the token signature.
+- Validate expiration and relevant claims such as issuer and audience.
+
+**Remember:** JWT signature verification must happen on the backend, not only in the frontend.
+
+## 9. Access Token vs Refresh Token
+
+| Access Token | Refresh Token |
+|---|---|
+| Used to access protected APIs | Used to obtain a new access token |
+| Usually short-lived | Usually longer-lived |
+| Sent with protected API requests | Sent to the refresh endpoint |
+
+Refresh tokens should be stored securely and rotated or revoked where supported.
+
+## 10. OWASP
+
+**OWASP = Open Worldwide Application Security Project.**
+
+OWASP provides security guidance, tools and resources for application security.
+
+OWASP Top 10 highlights important application security risks.
+
+Examples:
+
+- Broken Access Control.
+- Injection.
+- Security Misconfiguration.
+- Identification and Authentication Failures.
+
+## 11. SQL Injection
+
+SQL Injection is an attack where malicious SQL statements are inserted into database queries.
+
+### Unsafe example
+
+```javascript
+const query =
+  `SELECT * FROM users WHERE email = '${email}'`;
+```
+
+Directly inserting user input into a SQL query can allow an attacker to manipulate the query.
+
+### Prevention: Parameterized Queries
+
+```javascript
+const [rows] = await db.execute(
+  'SELECT * FROM users WHERE email = ?',
+  [email]
+);
+```
+
+The `?` placeholder keeps user input separate from SQL instructions.
+
+**Remember:** Use parameterized queries instead of directly concatenating user input into SQL.
+
+## 12. Payment Status Verification
+
+Suppose the React Native application receives a callback saying:
+
+```text
+SUCCESS
+```
+
+Should the backend immediately trust this callback?
+
+**No.** The backend must independently verify payment status using a trusted payment provider's authenticated webhook or status API.
+
+### Recommended payment flow
+
+```text
+React Native App
+       |
+       v
+Node.js Backend
+       |
+       v
+Payment Provider
+       |
+       v
+Backend Verification
+       |
+       v
+Update MySQL Status
+       |
+       v
+React Native Fetches Status
+```
+
+### Important points
+
+- Never trust frontend payment callbacks alone.
+- Verify payment status on the backend.
+- Store the verified transaction status.
+- Display the latest backend status in the application.
+
+## 13. Idempotency Key
+
+An idempotency key helps prevent duplicate processing of the same payment request.
+
+### Example
+
+```javascript
+const paymentRequest = {
+  amount: 500,
+  idempotencyKey: 'PAYMENT-12345'
+};
+```
+
+If the same request is submitted again with the same key, the backend should return the existing transaction result instead of processing another payment.
+
+### Important points
+
+- Idempotency must be enforced on the backend.
+- Use a unique database constraint or equivalent transaction-safe mechanism.
+- Frontend button disabling is useful for user experience but is not sufficient for financial protection.
+
+**Remember:** Frontend protection improves user experience. Backend idempotency protects the actual payment transaction.
+
+---
+
+# PART 26 – JEST TESTING AND CI/CD FUNDAMENTALS
+
+## 1. What is Jest?
+
+Jest is a JavaScript testing framework commonly used to test JavaScript functions and React Native application logic.
+
+It helps verify whether code behaves as expected.
+
+### Example function
+
+```javascript
+const addAmount = (a, b) => {
+  return a + b;
+};
+
+export default addAmount;
+```
+
+### Jest test
+
+```javascript
+import addAmount from './addAmount';
+
+test('adds two amounts correctly', () => {
+  expect(addAmount(100, 200)).toBe(300);
+});
+```
+
+### Important Jest functions
+
+| Function | Purpose |
+|---|---|
+| `test()` | Defines a test case |
+| `expect()` | Specifies the value to check |
+| `toBe()` | Checks whether the result matches the expected value |
+| `describe()` | Groups related test cases |
+
+### Explanation
+
+```javascript
+expect(addAmount(100, 200)).toBe(300);
+```
+
+1. Calls `addAmount(100, 200)`.
+2. Gets the result `300`.
+3. Checks whether the result is equal to the expected value `300`.
+
+### Types of testing
+
+| Type | Meaning |
+|---|---|
+| Unit Testing | Tests an individual function or component |
+| Integration Testing | Tests how multiple parts work together |
+| End-to-End Testing | Tests a complete user flow |
+
+**Remember:** Jest is a testing framework. React Native Testing Library can be used alongside Jest to test React Native components.
+
+**Learning status:** Jest fundamentals introduced. Component testing, API mocking and advanced testing still need practice.
+
+## 2. What is CI/CD?
+
+CI/CD automates the process of building, testing and delivering software.
+
+**CI = Continuous Integration**
+
+- Developers push code to Git.
+- Automated build starts.
+- Tests run.
+- Code changes are checked.
+
+**CD = Continuous Delivery / Continuous Deployment**
+
+- Application artifacts are prepared for release.
+- Deployment can be automated depending on the pipeline.
+
+## 3. What is Jenkins?
+
+Jenkins is an automation server commonly used to build CI/CD pipelines.
+
+### Example: React Native project
+
+```text
+Developer pushes code to Git
+             |
+             v
+      Jenkins Pipeline
+             |
+             v
+    Install Dependencies
+             |
+             v
+       Build Application
+             |
+             v
+        Run Jest Tests
+             |
+             v
+       Quality Checks
+             |
+             v
+    Generate APK / AAB
+```
+
+### Benefits
+
+- Automates builds.
+- Runs automated tests.
+- Integrates quality checks.
+- Reduces manual deployment steps.
+- Helps maintain a consistent release process.
+
+**Remember:** Jenkins = Automation of build, test and deployment workflows.
+
+---
+
+# PART 27 – RECENT PREPARATION PROGRESS
+
+## Topics Practised
+
+| Topic | Status |
+|---|---|
+| React Native New Architecture | Practised – fundamentals |
+| JavaScript, UI and Shadow Threads | Practised |
+| FlatList and performance optimization | Practised |
+| React.memo, useMemo and useCallback | Practised |
+| JavaScript Event Loop and Promises | Practised |
+| TypeScript fundamentals | Practised |
+| Native integration concepts | Practised |
+| App lifecycle and AppState | Practised |
+| HTTPS and TLS | Practised |
+| Certificate pinning | Practised |
+| Secure token storage | Practised |
+| API secret management | Practised |
+| UPI PIN protection | Practised |
+| MITM attacks | Practised |
+| Authentication and Authorization | Practised |
+| JWT and refresh tokens | Practised |
+| OWASP and SQL Injection | Practised |
+| Payment verification | Practised |
+| Idempotency keys | Practised |
+| Jest fundamentals | Introduced |
+| Jenkins and CI/CD | Introduced |
+
+## Important Pending Topics
+
+1. Jest component testing and API mocking.
+2. Docker and containers.
+3. Kubernetes fundamentals.
+4. Gradle, Maven and Groovy basics.
+5. SonarQube and Checkmarx.
+6. HLD and LLD for mobile applications.
+7. RxJS – revisit from the basics.
+8. Revision of React Native architecture and performance.
+9. Revision of UPI payment lifecycle and security.
+
+**Current checkpoint:** Mobile security fundamentals have been practised. Jest and DevOps have been introduced but need further coverage. RxJS is paused for now and can be revisited later.
+
+**Preparation rule:** Focus on understanding concepts, explaining practical scenarios and connecting them to React Native payment application development.
+
+
+-------------------------------------------
+# PART 28 – JEST AND REACT NATIVE TESTING (CONTINUED)
+
+## 1. Jest – Basic Testing
+
+Jest is a JavaScript testing framework used to test JavaScript functions and application logic.
+
+### Example
+
+```javascript
+function add(a, b) {
+  return a + b;
+}
+
+test('adds two numbers', () => {
+  expect(add(2, 3)).toBe(5);
+});
+```
+
+### Important Jest functions
+
+| Function | Purpose |
+|---|---|
+| `test()` | Defines a test case |
+| `expect()` | Defines the expected result |
+| `toBe()` | Checks primitive equality |
+| `toEqual()` | Checks object/array equality |
+| `describe()` | Groups related tests |
+| `jest.fn()` | Creates a mock function |
+
+## 2. Unit Testing vs Integration Testing
+
+| Unit Testing | Integration Testing |
+|---|---|
+| Tests an individual function or component | Tests multiple parts working together |
+| Focuses on one unit | Focuses on interaction between units |
+| Example: Email validation | Example: Login form + API response |
+
+Remember:
+- Unit testing = Individual functionality.
+- Integration testing = Combined functionality.
+
+## 3. React Native Testing Library (RNTL)
+
+React Native Testing Library helps test React Native components from the user's perspective.
+
+### Example
+
+```javascript
+import { render, screen } from '@testing-library/react-native';
+
+test('Login button is displayed', () => {
+  render(<LoginScreen />);
+
+  expect(
+    screen.getByText('Login')
+  ).toBeTruthy();
+});
+```
+
+### Important methods
+
+| Method | Purpose |
+|---|---|
+| `render()` | Renders the component |
+| `screen.getByText()` | Finds an element by text |
+| `screen.getByTestId()` | Finds an element by test ID |
+| `screen.queryByText()` | Checks whether an element exists |
+| `screen.findByText()` | Finds an element asynchronously |
+| `fireEvent.press()` | Simulates a button press |
+
+Remember:
+- Jest = Runs tests and assertions.
+- RNTL = Helps render and interact with React Native components.
+
+## 4. getByText vs queryByText vs findByText
+
+This is an important testing concept.
+
+| Method | Behaviour |
+|---|---|
+| `getByText()` | Finds immediately; throws an error if missing |
+| `queryByText()` | Returns `null` if missing |
+| `findByText()` | Waits asynchronously for the element to appear |
+
+### Examples
+
+```javascript
+// Throws an error if Login is missing
+screen.getByText('Login');
+
+// Returns null if Logout is missing
+screen.queryByText('Logout');
+
+// Waits for Vignesh to appear
+await screen.findByText('Vignesh');
+```
+
+### When to use?
+
+**getByText():** When the element should already exist.
+
+**queryByText():** When checking whether an element is absent.
+
+```javascript
+expect(
+  screen.queryByText('Logout')
+).toBeNull();
+```
+
+**findByText():** When an element appears after an asynchronous operation, such as an API response.
+
+```javascript
+const user = await screen.findByText('Vignesh');
+
+expect(user).toBeTruthy();
+```
+
+## 5. API Mocking in Jest
+
+Mocking means replacing an actual dependency with a controlled test implementation.
+
+In React Native, we commonly mock API functions instead of calling production APIs during tests.
+
+### Successful API response
+
+```javascript
+jest.mock('./api', () => ({
+  loginUser: jest.fn().mockResolvedValue({
+    success: true,
+    token: 'test-token'
+  })
+}));
+```
+
+`mockResolvedValue()` simulates a successful Promise response.
+
+### Failed API response
+
+```javascript
+jest.mock('./api', () => ({
+  fetchUsers: jest.fn().mockRejectedValue(
+    new Error('Network Error')
+  )
+}));
+```
+
+`mockRejectedValue()` simulates a rejected Promise.
+
+### Important methods
+
+| Method | Purpose |
+|---|---|
+| `jest.fn()` | Creates a mock function |
+| `mockResolvedValue()` | Simulates Promise success |
+| `mockRejectedValue()` | Simulates Promise failure |
+| `jest.clearAllMocks()` | Clears mock call history |
+
+Remember:
+- Resolved = Success.
+- Rejected = Failure.
+
+## 6. Asynchronous API Testing – waitFor()
+
+API calls are asynchronous. The UI may update after the API response arrives.
+
+`waitFor()` waits until a specified condition becomes true or times out.
+
+### Example
+
+```javascript
+import {
+  render,
+  screen,
+  waitFor
+} from '@testing-library/react-native';
+
+test('displays fetched user', async () => {
+  render(<UsersScreen />);
+
+  await waitFor(() => {
+    expect(
+      screen.getByText('Vignesh')
+    ).toBeTruthy();
+  });
+});
+```
+
+### Important concepts
+
+| Concept | Purpose |
+|---|---|
+| `async/await` | Handles asynchronous operations |
+| `waitFor()` | Waits for an expected condition |
+| `findByText()` | Waits for an element to appear |
+| `mockResolvedValue()` | Simulates API success |
+| `mockRejectedValue()` | Simulates API failure |
+
+Remember:
+- Use `waitFor()` when checking an asynchronous condition.
+- Use `findByText()` when waiting for an element to appear.
+- Avoid arbitrary `setTimeout()` delays in tests.
+
+## 7. Snapshot Testing
+
+Snapshot testing captures a rendered component's output and compares it with a previously saved snapshot.
+
+### Example
+
+```jsx
+<Button title="Login" />
+```
+
+A snapshot records the rendered structure.
+
+If someone unexpectedly changes the button text from `Login` to `Submit`, the snapshot test can detect the change.
+
+### Benefits
+
+- Detects unexpected UI structure changes.
+- Identifies accidental modifications.
+- Helps maintain component consistency.
+
+Important:
+Snapshot testing does not guarantee that the UI looks visually correct or behaves correctly.
+
+## 8. Code Coverage
+
+Code Coverage measures how much of the source code is executed by tests.
+
+### Types of Code Coverage
+
+| Type | Meaning |
+|---|---|
+| Statement Coverage | Checks whether statements were executed |
+| Branch Coverage | Checks whether different conditional paths were executed |
+| Function Coverage | Checks whether functions were called |
+| Line Coverage | Checks whether lines were executed |
+
+### Example
+
+```javascript
+function checkAge(age) {
+  if (age >= 18) {
+    return 'Adult';
+  }
+
+  return 'Minor';
+}
+```
+
+If the test checks only:
+
+```javascript
+checkAge(20);
+```
+
+The `Minor` branch is not tested.
+
+We should also test:
+
+```javascript
+checkAge(15);
+```
+
+Remember:
+100% code coverage does not guarantee bug-free code. It only indicates how much code was executed by tests.
+
+## 9. Testing User Interactions – fireEvent.press()
+
+`fireEvent.press()` simulates a user pressing a button.
+
+### Example
+
+```javascript
+import {
+  render,
+  fireEvent,
+  screen
+} from '@testing-library/react-native';
+
+test('button click updates text', () => {
+  render(<LoginScreen />);
+
+  fireEvent.press(
+    screen.getByText('Login')
+  );
+
+  expect(
+    screen.getByText('Welcome')
+  ).toBeTruthy();
+});
+```
+
+### Execution flow
+
+1. `render()` – Renders the component.
+2. `getByText()` – Finds the Login button.
+3. `fireEvent.press()` – Simulates a button press.
+4. `expect()` – Checks the expected result.
+
+## 10. Testing Loading, Success and Error States
+
+When an API is called, the application usually has three UI states.
+
+### Loading State
+
+The API request is in progress.
+
+```jsx
+{loading && <ActivityIndicator />}
+```
+
+### Success State
+
+The API returns successfully.
+
+```jsx
+{!loading && <Text>Users loaded</Text>}
+```
+
+### Error State
+
+The API request fails.
+
+```jsx
+{error && <Text>Something went wrong</Text>}
+```
+
+### What should we test?
+
+| State | Expected behaviour |
+|---|---|
+| Loading | ActivityIndicator appears |
+| Success | Loading indicator disappears and data appears |
+| Error | Error message appears |
+
+Important:
+Test the UI behaviour for API success, API failure and loading states.
+
+## 11. Jest Lifecycle Methods
+
+Jest provides lifecycle methods to execute setup and cleanup logic.
+
+| Method | Execution |
+|---|---|
+| `beforeEach()` | Runs before every test |
+| `afterEach()` | Runs after every test |
+| `beforeAll()` | Runs once before all tests |
+| `afterAll()` | Runs once after all tests |
+
+### Example – beforeEach()
+
+```javascript
+beforeEach(() => {
+  console.log('Starting test');
+});
+```
+
+Runs before every test case.
+
+### Example – afterEach()
+
+```javascript
+afterEach(() => {
+  jest.clearAllMocks();
+});
+```
+
+Runs after every test case.
+
+### Example – beforeAll()
+
+```javascript
+beforeAll(() => {
+  console.log('Setup once');
+});
+```
+
+Runs once before all test cases.
+
+### Example – afterAll()
+
+```javascript
+afterAll(() => {
+  console.log('Cleanup once');
+});
+```
+
+Runs once after all test cases.
+
+Remember:
+- beforeEach = Before every test.
+- afterEach = After every test.
+- beforeAll = Once before all tests.
+- afterAll = Once after all tests.
+
+## 12. Important Testing Revision Table
+
+| Question | Answer |
+|---|---|
+| Which framework is used for JavaScript testing? | Jest |
+| What tests React Native components? | RNTL |
+| What simulates button press? | `fireEvent.press()` |
+| What simulates API success? | `mockResolvedValue()` |
+| What simulates API failure? | `mockRejectedValue()` |
+| What waits for an asynchronous condition? | `waitFor()` |
+| What waits for an element to appear? | `findByText()` |
+| What returns null when an element is missing? | `queryByText()` |
+| What captures rendered component output? | Snapshot Testing |
+| What measures executed code? | Code Coverage |
+| What runs before every test? | `beforeEach()` |
+| What runs after every test? | `afterEach()` |
+| What runs once before all tests? | `beforeAll()` |
+| What runs once after all tests? | `afterAll()` |
+
+## 13. Recent Learning Progress
+
+| Topic | Status |
+|---|---|
+| Jest fundamentals | Practised |
+| Unit vs Integration testing | Practised |
+| React Native Testing Library | Practised |
+| API mocking – success/failure | Practised |
+| Async testing – waitFor() | Practised |
+| Snapshot testing | Practised |
+| Code Coverage | Practised |
+| User interactions | Practised |
+| Loading and Error states | Practised |
+| getByText / queryByText / findByText | Practised |
+| Jest lifecycle methods | Needs revision |
+
+### Areas to revisit
+
+1. Difference between `beforeEach()` and `beforeAll()`.
+2. Difference between `afterEach()` and `afterAll()`.
+3. Practise one complete component testing example.
+4. Practise testing API success, loading and error states.
+
+### Preparation Strategy
+
+Since preparation time is limited:
+
+- Do not spend too much time on advanced Jest topics.
+- Revise the important methods and their use cases.
+- Practise one practical component testing example.
+- Prioritise React Native performance, JavaScript, native integrations, payment security and architecture.
+
+**Current checkpoint:** Jest and React Native Testing Library fundamentals have been practised. Lifecycle methods need revision. Continue with the next high-priority React Native performance topic.
